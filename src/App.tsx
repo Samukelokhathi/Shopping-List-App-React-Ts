@@ -1,3 +1,8 @@
 export default function App() {
-  return <div>Shopping List App </div>;
+  return (
+    <div>
+      <h1>Shopping list app</h1>
+      <h2>Testing deployment </h2>
+    </div>
+  );
 }
