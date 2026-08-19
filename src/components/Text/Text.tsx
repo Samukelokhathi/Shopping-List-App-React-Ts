@@ -1,5 +1,5 @@
 import React from "react";
-// import textStyle from "./Text.module.css";
+import textStyle from "./Text.module.css";
 
 type Props = {
   variant?: string;
@@ -22,7 +22,7 @@ export const Text: React.FC<Props> = ({
     );
   if (variant === "h2")
     return (
-      <h2 style={style} className={className}>
+      <h2 style={style} className={textStyle.h2}>
         {children}{" "}
       </h2>
     );

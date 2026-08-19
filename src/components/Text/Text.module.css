@@ -1,9 +1,9 @@
 .variant-h1 {
     color: white;
 }
-.variant-h2 {
-    color: white;
-    font-size: 20px;
+.h2 {
+    color: black;
+    font-size: 40px;
 }
 .variant-h3 {
     color: white;

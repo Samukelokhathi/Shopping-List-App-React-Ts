@@ -1,1 +1,75 @@
+import { Input } from "../../components/input/Input";
+import styles from "./Register.module.css";
+import Button from "../../components/Button/Button";
+import { Text } from "../../components/Text/Text";
 
+function Register() {
+  return (
+    <div className={styles.page}>
+      <div className={styles.welcomeText}>
+        <Text variant="h2" children={"Create your basket"} />
+        <Text
+          variant="p"
+          children={"Your password is encrypted before it is ever stored."}
+        />
+      </div>
+
+      <form className={styles.card}>
+        <div className={styles.nameSurnameContainer}>
+          <Input
+            id="Name"
+            name="Name"
+            label="Email Address"
+            type="text"
+            onChange={() => {}}
+          />
+          <Input
+            id="Surname"
+            name="Surname"
+            label="Surname"
+            type="text"
+            onChange={() => {}}
+          />
+        </div>
+        <Input
+          id="email"
+          name="email"
+          label="email"
+          type="text"
+          onChange={() => {}}
+        />
+        <Input
+          id="Cell number"
+          name="Cell number"
+          label="Cell number"
+          type="text"
+          onChange={() => {}}
+        />
+        <div className={styles.passwordContainer}>
+          <Input
+            id="Password"
+            name="Password"
+            label="Password"
+            type="password"
+            onChange={() => {}}
+          />
+          <Input
+            id="Confirm password"
+            name="Confirm password"
+            label="Confirm password"
+            type="password"
+            onChange={() => {}}
+          />
+        </div>
+
+        <Button type="submit">Sign in</Button>
+
+        <p className={styles.registerText}>
+          New here? <a className={styles.registerLink}>Create an Account</a>
+        </p>
+      </form>
+    </div>
+  );
+}
+
+export default Register;
