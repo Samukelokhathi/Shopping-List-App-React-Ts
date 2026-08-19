@@ -1,5 +1,6 @@
 import { Input } from "../../components/input/Input";
 import styles from "./Login.module.css";
+import Button from "../../components/Button/Button";
 
 function Login() {
   return (
@@ -23,15 +24,10 @@ function Login() {
           onChange={() => {}}
         />
 
-        <button className={styles.button} type="submit">
-          Sign in
-        </button>
+        <Button type="submit">Sign in</Button>
 
         <p className={styles.registerText}>
-          New here?{" "}
-          <button type="button" className={styles.link}>
-            Create an Account
-          </button>
+          New here? <a className={styles.registerLink}>Create an Account</a>
         </p>
       </form>
     </div>
