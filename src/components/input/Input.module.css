@@ -1,9 +1,7 @@
 .input-btn-container {
-    /* border: 3px solid blue; */
     height: 8vh;
     display: flex;
     border: 1px solid #ff0f0f;
-    align-items: center;
     gap: 3rem;
 }
 
@@ -21,7 +19,6 @@
 .input-label-container{
     display: flex;
     border: 2p solid blue;
-    /* background-color: rebeccapurple; */
     height: 7vh;
     gap: 3px;
     flex-direction: column;
