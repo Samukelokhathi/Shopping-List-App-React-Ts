@@ -2,6 +2,7 @@ import { Input } from "../../components/input/Input";
 import styles from "./Login.module.css";
 import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
+import { NavLink } from "react-router-dom";
 
 function Login() {
   return (
@@ -34,7 +35,10 @@ function Login() {
         <Button type="submit">Sign in</Button>
 
         <p className={styles.registerText}>
-          New here? <a className={styles.registerLink}>Create an Account</a>
+          New here?{" "}
+          <NavLink to={"/register"} className={styles.registerLink}>
+            Create an account
+          </NavLink>
         </p>
       </form>
     </div>

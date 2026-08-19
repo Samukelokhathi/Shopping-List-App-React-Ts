@@ -59,19 +59,3 @@
   color: #111;
 }
 
-.link {
-  padding: 0;
-
-  border: none;
-  background: none;
-
-  color: #1c5b30;
-
-  font-size: inherit;
-
-  cursor: pointer;
-}
-
-.link:hover {
-  text-decoration: underline;
-}

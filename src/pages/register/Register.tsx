@@ -2,6 +2,7 @@ import { Input } from "../../components/input/Input";
 import styles from "./Register.module.css";
 import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
+import { NavLink } from "react-router-dom";
 
 function Register() {
   return (
@@ -19,7 +20,7 @@ function Register() {
           <Input
             id="Name"
             name="Name"
-            label="Email Address"
+            label="Name"
             type="text"
             onChange={() => {}}
           />
@@ -33,8 +34,8 @@ function Register() {
         </div>
         <Input
           id="email"
-          name="email"
-          label="email"
+          name="Email"
+          label="Email"
           type="text"
           onChange={() => {}}
         />
@@ -62,10 +63,13 @@ function Register() {
           />
         </div>
 
-        <Button type="submit">Sign in</Button>
+        <Button type="submit">Sign up</Button>
 
         <p className={styles.registerText}>
-          New here? <a className={styles.registerLink}>Create an Account</a>
+          Already registered?{" "}
+          <NavLink to={"/"} className={styles.registerLink}>
+            Sign in
+          </NavLink>
         </p>
       </form>
     </div>
