@@ -1,0 +1,15 @@
+.variant-h1 {
+    color: white;
+}
+.variant-h2 {
+    color: white;
+    font-size: 20px;
+}
+.variant-h3 {
+    color: white;
+    font-weight: bold;
+}
+.variant-p {
+    color: white;
+    font-size: 10px;
+}
