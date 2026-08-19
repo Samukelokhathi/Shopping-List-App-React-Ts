@@ -6,7 +6,6 @@ type ButtonProps = {
   type?: "button" | "submit" | "reset";
   variant?: "primary" | "secondary" | "danger";
   width?: string;
-  disabled?: boolean;
   onClick?: () => void;
 };
 
@@ -15,7 +14,6 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   variant = "primary",
   width = "100%",
-  disabled = false,
   onClick,
 }) => {
   return (
@@ -23,7 +21,6 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       className={`${buttonStyle.button} ${buttonStyle[variant]}`}
       style={{ width }}
-      disabled={disabled}
       onClick={onClick}
     >
       {children}
