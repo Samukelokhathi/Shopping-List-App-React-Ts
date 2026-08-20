@@ -2,9 +2,21 @@ import { Input } from "../../components/input/Input";
 import styles from "./Register.module.css";
 import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
+
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  setName,
+  setSurname,
+  setNumber,
+  setEmail,
+  setPassword,
+  setConfirmPassword,
+} from "../../store/SignUpSlice";
+
 
 function Register() {
+  const dispatch = useDispatch();
   return (
     <div className={styles.page}>
       <div className={styles.welcomeText}>
@@ -22,14 +34,14 @@ function Register() {
             name="Name"
             label="Name"
             type="text"
-            onChange={() => {}}
+            onChange={(e) => dispatch(setName(e.target.value))}
           />
           <Input
             id="Surname"
             name="Surname"
             label="Surname"
             type="text"
-            onChange={() => {}}
+            onChange={(e) => dispatch(setSurname(e.target.value))}
           />
         </div>
         <Input
@@ -37,14 +49,14 @@ function Register() {
           name="Email"
           label="Email"
           type="text"
-          onChange={() => {}}
+          onChange={(e) => dispatch(setEmail(e.target.value))}
         />
         <Input
           id="Cell number"
           name="Cell number"
           label="Cell number"
           type="text"
-          onChange={() => {}}
+          onChange={(e) => dispatch(setNumber(e.target.value))}
         />
         <div className={styles.passwordContainer}>
           <Input
@@ -52,14 +64,14 @@ function Register() {
             name="Password"
             label="Password"
             type="password"
-            onChange={() => {}}
+            onChange={(e) => dispatch(setPassword(e.target.value))}
           />
           <Input
             id="Confirm password"
             name="Confirm password"
             label="Confirm password"
             type="password"
-            onChange={() => {}}
+            onChange={(e) => dispatch(setConfirmPassword(e.target.value))}
           />
         </div>
 
