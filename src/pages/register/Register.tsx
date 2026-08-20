@@ -4,7 +4,9 @@ import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
 
 import { NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState, AppDispatch } from "../../store/Store";
+
 import {
   setName,
   setSurname,
@@ -14,9 +16,11 @@ import {
   setConfirmPassword,
 } from "../../store/SignUpSlice";
 
-
 function Register() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const signUpData = useSelector((state: RootState) => state.signUp);
+  console.log(signUpData.email);
   return (
     <div className={styles.page}>
       <div className={styles.welcomeText}>
@@ -35,6 +39,7 @@ function Register() {
             label="Name"
             type="text"
             onChange={(e) => dispatch(setName(e.target.value))}
+            style={{ width: 240 }}
           />
           <Input
             id="Surname"
@@ -42,6 +47,7 @@ function Register() {
             label="Surname"
             type="text"
             onChange={(e) => dispatch(setSurname(e.target.value))}
+            style={{ width: 240 }}
           />
         </div>
         <Input
@@ -65,6 +71,7 @@ function Register() {
             label="Password"
             type="password"
             onChange={(e) => dispatch(setPassword(e.target.value))}
+            style={{ width: 240 }}
           />
           <Input
             id="Confirm password"
@@ -72,6 +79,7 @@ function Register() {
             label="Confirm password"
             type="password"
             onChange={(e) => dispatch(setConfirmPassword(e.target.value))}
+            style={{ width: 240 }}
           />
         </div>
 
