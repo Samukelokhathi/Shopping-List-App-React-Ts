@@ -1,11 +1,10 @@
-
 import { configureStore } from "@reduxjs/toolkit";
-import signUp from "../store/SignUpSlice"
+import signUpReducer from "../store/SignUpSlice";
 
 export const store = configureStore({
-    reducer: {
-        signUp
-    },
+  reducer: {
+    signUp: signUpReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

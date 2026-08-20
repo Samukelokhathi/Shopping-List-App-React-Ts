@@ -14,6 +14,8 @@ import {
   setEmail,
   setPassword,
   setConfirmPassword,
+  signup,
+  resetForm,
 } from "../../store/SignUpSlice";
 
 function Register() {
@@ -21,6 +23,19 @@ function Register() {
 
   const signUpData = useSelector((state: RootState) => state.signUp);
   console.log(signUpData.email);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await dispatch(signup(signUpData)).unwrap();
+
+      dispatch(resetForm());
+    } catch (error) {
+      console.error("Signup failed:", error);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.welcomeText}>
@@ -31,13 +46,14 @@ function Register() {
         />
       </div>
 
-      <form className={styles.card}>
+      <form className={styles.card} onSubmit={handleSubmit}>
         <div className={styles.nameSurnameContainer}>
           <Input
             id="Name"
             name="Name"
             label="Name"
             type="text"
+            value={signUpData.name}
             onChange={(e) => dispatch(setName(e.target.value))}
             style={{ width: 240 }}
           />
@@ -46,6 +62,7 @@ function Register() {
             name="Surname"
             label="Surname"
             type="text"
+            value={signUpData.surname}
             onChange={(e) => dispatch(setSurname(e.target.value))}
             style={{ width: 240 }}
           />
@@ -55,6 +72,7 @@ function Register() {
           name="Email"
           label="Email"
           type="text"
+          value={signUpData.email}
           onChange={(e) => dispatch(setEmail(e.target.value))}
         />
         <Input
@@ -62,6 +80,7 @@ function Register() {
           name="Cell number"
           label="Cell number"
           type="text"
+          value={signUpData.number}
           onChange={(e) => dispatch(setNumber(e.target.value))}
         />
         <div className={styles.passwordContainer}>
@@ -70,6 +89,7 @@ function Register() {
             name="Password"
             label="Password"
             type="password"
+            value={signUpData.password}
             onChange={(e) => dispatch(setPassword(e.target.value))}
             style={{ width: 240 }}
           />
@@ -77,6 +97,7 @@ function Register() {
             id="Confirm password"
             name="Confirm password"
             label="Confirm password"
+            value={signUpData.confirmPassword}
             type="password"
             onChange={(e) => dispatch(setConfirmPassword(e.target.value))}
             style={{ width: 240 }}

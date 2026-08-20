@@ -42,7 +42,7 @@ export const signup = createAsyncThunk(
 );
 
 const SignInSlice = createSlice({
-  name: "signupPage",
+  name: "signup",
 
   initialState,
 
@@ -71,10 +71,19 @@ const SignInSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signup.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
-    });
+    builder
+      .addCase(signup.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(signup.fulfilled, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(signup.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || "Signup failed";
+      });
   },
 });
 
