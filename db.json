@@ -1,4 +1,13 @@
 {
-  "users": [],
+  "users": [
+    {
+      "name": "Unknown",
+      "surname": "Sigma",
+      "number": "09484742853",
+      "email": "ndilibinomuribanji@gmail.com",
+      "password": "eeeeee",
+      "id": "k-JoWt1_ksg"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
