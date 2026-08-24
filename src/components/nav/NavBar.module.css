@@ -28,7 +28,7 @@
 
 .myListsButton {
     padding: 10px 10px;
-    border-radius: 20px;
+    border-radius: 30px;
 
     background-color: #216b36;
     color: white;
@@ -48,7 +48,7 @@
 
 .signOutButton {
     padding: 9px 18px;
-    border-radius: 20px;
+    border-radius: 30px;
 
     background-color: #ff0000;
     color: white;
@@ -58,7 +58,7 @@
 
 @media (max-width: 600px) {
     .navbar {
-        padding: 0 20px;
+        padding: 0 30px;
     }
 
     .logo {

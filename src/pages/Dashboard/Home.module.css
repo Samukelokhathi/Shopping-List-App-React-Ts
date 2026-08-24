@@ -1,0 +1,23 @@
+.main {
+    width: 82%;
+    max-width: 785px;
+    margin: 42px auto 0;
+
+
+}
+
+.hero {
+    background-color: #216b36;
+    color: white;
+    border-radius: 15px;
+    padding: 22px 33px 31px;
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+
+}
+
+.newListButton {
+    width: 100%;
+    background-color: #D9D9D9;
+}
