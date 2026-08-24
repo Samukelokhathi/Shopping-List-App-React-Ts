@@ -2,9 +2,14 @@ import homeStyle from "../../pages/Dashboard/Home.module.css"
 import Navbar from "../../components/nav/NavBar";
 
 import Button from "../../components/Button/Button";
+import { Input } from "../../components/input/Input";
 import { Text } from "../../components/Text/Text";
 
+import { useState } from "react";
+
 const Home = () => {
+    const [search, setSearch] = useState("");
+    const [sort, setSort] = useState("default");
     return (
         <div className={homeStyle.container}>
             <Navbar />
@@ -26,6 +31,35 @@ const Home = () => {
                     >
                         + New list
                     </Button>
+                </section>
+
+
+                <section className={homeStyle.controls}>
+                    <Input
+                        type="text"
+                        value={search}
+                        onChange={(event) =>
+                            setSearch(event.target.value)
+                        }
+                        className={homeStyle.searchInput}
+                    />
+
+                    <div className={homeStyle.filters}>
+                        <Button className={homeStyle.searchButton}>
+                            Search
+                        </Button>
+                        <select
+                            value={sort}
+                            onChange={(event) =>
+                                setSort(event.target.value)
+                            }
+                            className={homeStyle.sortSelect}
+                        >
+                            <option value="default">Sort by</option>
+                            <option value="name">Name</option>
+                            <option value="items">Items</option>
+                        </select>
+                    </div>
                 </section>
 
 
