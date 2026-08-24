@@ -1,11 +1,11 @@
 import homeStyle from "../../pages/Dashboard/Home.module.css"
+import Navbar from "../../components/nav/NavBar";
 
 const Home = () => {
     return (
         <div className={homeStyle.container}>
-            <h2>Welcome to home page
-            </h2>
-            <h1>Home page</h1>
+            <Navbar />
+
         </div>
     );
 };
