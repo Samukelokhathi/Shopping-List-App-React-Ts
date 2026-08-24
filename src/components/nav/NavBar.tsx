@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Button from "../Button/Button";
 
 import type { AppDispatch } from "../../store/Store";
 import { logout } from "../../store/AuthSlice";
@@ -22,26 +23,26 @@ function Navbar() {
             </div>
 
             <nav className={styles.navigation}>
-                <button
-                    className={`${styles.navButton} ${styles.active}`}
-                    onClick={() => navigate("/home")}
+                <Button
+                    className={`${styles.myListsButton} ${styles.active}`}
+                    onClick={() => navigate("/")}
                 >
                     My lists
-                </button>
+                </Button>
 
-                <button
+                <Button
                     className={styles.profileButton}
                     onClick={() => navigate("/profile")}
                 >
                     Profile
-                </button>
+                </Button>
 
-                <button
+                <Button
                     className={styles.signOutButton}
                     onClick={handleLogout}
                 >
                     Sign out
-                </button>
+                </Button>
             </nav>
         </header>
     );

@@ -1,12 +1,12 @@
 .button {
-  height: 43px;
+  min-height: 43px;
 
   padding: 0 1rem;
 
   border: none;
   border-radius: 10px;
 
-  font-size: 0.85rem;
+  font-size: 0.6rem;
   font-weight: 600;
 
   cursor: pointer;

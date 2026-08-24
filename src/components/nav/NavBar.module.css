@@ -1,6 +1,7 @@
 .navbar {
     width: 100%;
     min-height: 70px;
+
     background-color: #ffffff;
     border: 1px solid #e1e1e1;
 
@@ -24,44 +25,36 @@
     gap: 15px;
 }
 
-.navButton,
-.profileButton,
-.signOutButton {
-    border: none;
-    background: none;
-    cursor: pointer;
 
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.navButton {
-    padding: 9px 17px;
+.myListsButton {
+    padding: 10px 10px;
     border-radius: 20px;
+
+    background-color: #216b36;
+    color: white;
+
 }
 
-.navButton.active {
+
+.profileButton {
+    padding: 15px 17px;
+    border-radius: 20px;
+
+
     background-color: #216b36;
     color: white;
 }
 
-.profileButton {
-    padding: 9px 2px;
-}
 
 .signOutButton {
-    background-color: #ff0000;
-    color: white;
-
     padding: 9px 18px;
     border-radius: 20px;
+
+    background-color: #ff0000;
+    color: white;
 }
 
-.navButton:hover,
-.profileButton:hover,
-.signOutButton:hover {
-    opacity: 0.85;
-}
+
 
 @media (max-width: 600px) {
     .navbar {
