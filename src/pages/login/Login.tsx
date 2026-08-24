@@ -4,7 +4,16 @@ import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
 import { NavLink } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
+
 function Login() {
+
+  const navigate = useNavigate();
+  const navToHome = () => {
+    navigate("/home")
+  }
+
+
   return (
     <div className={styles.page}>
       <div className={styles.welcomeText}>
@@ -22,6 +31,7 @@ function Login() {
           label="Email Address"
           type="email"
           onChange={() => { }}
+
         />
 
         <Input
@@ -32,12 +42,12 @@ function Login() {
           onChange={() => { }}
         />
 
-        <Button type="submit">Sign in</Button>
+        <Button onClick={navToHome} type="submit">Sign in</Button>
 
         <p className={styles.registerText}>
           New here?{" "}
           <NavLink to={"/register"} className={styles.registerLink}>
-            Create an account
+            Create an account+
           </NavLink>
         </p>
       </form>

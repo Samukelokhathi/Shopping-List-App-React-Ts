@@ -12,6 +12,7 @@ type InputProps = {
   placeholder?: string;
   type?: React.HTMLInputTypeAttribute;
   className?: string
+  required?: string
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -23,7 +24,8 @@ export const Input: React.FC<InputProps> = ({
   error,
   name,
   type = "text",
-  className = ""
+  className = "",
+  required
 }) => {
   return (
     <div className={inputStyle["input-label-container"]}>
@@ -31,6 +33,7 @@ export const Input: React.FC<InputProps> = ({
       <input
         name={name}
         id={id}
+        required
         style={style}
         type={type}
         value={value}
