@@ -1,0 +1,9 @@
+header {
+    color: black;
+}
+
+.container {
+    border: 5px solid rebeccapurple;
+    height: 50%;
+    width: 50%;
+}

@@ -21,7 +21,7 @@ function Login() {
           name="email"
           label="Email Address"
           type="email"
-          onChange={() => {}}
+          onChange={() => { }}
         />
 
         <Input
@@ -29,7 +29,7 @@ function Login() {
           name="password"
           label="Password"
           type="password"
-          onChange={() => {}}
+          onChange={() => { }}
         />
 
         <Button type="submit">Sign in</Button>
