@@ -3,14 +3,14 @@ import type { User } from "../../types/User"
 import { login } from "./AuthThunks"
 
 
-interface LoginState {
+interface AuthState {
     user: User | null;
     isAuthenticated: boolean;
     isLoading: boolean;
     error: string | null;
 }
 
-const initialState: LoginState = {
+const initialState: AuthState = {
     user: null,
     isAuthenticated: false,
     isLoading: false,
@@ -35,9 +35,31 @@ const AuthSlice = createSlice({
 
             .addCase(login.pending, (state) => {
                 state.isLoading = true;
-                state.error = null
+                state.error = null;
             })
 
+            .addCase(login.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = action.payload;
+                state.isAuthenticated = true;
+                state.error = null;
+            })
+
+            .addCase(login.rejected, (state, action) => {
+                state.isLoading = false;
+                state.user = null;
+                state.isAuthenticated = false;
+
+                state.error =
+                    (action.payload as string) ||
+                    "Login failed";
+            });
     },
 });
+
+export const { logout } = AuthSlice.actions;
+
+export default AuthSlice.reducer;
+
+
 
