@@ -16,7 +16,7 @@ import {
   setConfirmPassword,
   signup,
   resetForm,
-} from "../../store/SignUpSlice";
+} from "../../store/Signup/SignUpSlice";
 
 function Register() {
   const dispatch = useDispatch<AppDispatch>();
