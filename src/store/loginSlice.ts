@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { signup, type SignUpData } from "./Signup/SignUpThunk"
+
 
 export interface User {
     id: string;

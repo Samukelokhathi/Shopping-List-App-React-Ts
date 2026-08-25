@@ -1,47 +1,24 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, type PayloadAction, } from "@reduxjs/toolkit";
 
-interface SignInState {
-  name: string;
-  surname: string;
-  number: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+import { signup, type SignUpData } from "../Signup/SignUpThunk"
+interface SignUpState extends SignUpData {
   isLoading: boolean;
   error: string | null;
 }
 
-const initialState: SignInState = {
+const initialState: SignUpState = {
   name: "",
   surname: "",
   number: "",
   email: "",
   password: "",
   confirmPassword: "",
+
   isLoading: false,
   error: null,
-};
+}
 
-export const signup = createAsyncThunk(
-  "signup",
-  async (userData: SignInState) => {
-    const response = await axios.post("http://localhost:3000/users", {
-      name: userData.name,
-      surname: userData.surname,
-      number: userData.number,
-      email: userData.email,
-      password: userData.password,
-    });
-    return response.data;
-  },
-);
-
-const SignInSlice = createSlice({
+const SignUpSlice = createSlice({
   name: "signup",
 
   initialState,
@@ -70,6 +47,7 @@ const SignInSlice = createSlice({
       Object.assign(state, initialState);
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(signup.pending, (state) => {
@@ -82,7 +60,8 @@ const SignInSlice = createSlice({
       })
       .addCase(signup.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || "Signup failed";
+
+        state.error = (action.payload as string) || "Signup failed";
       });
   },
 });
@@ -95,6 +74,6 @@ export const {
   setPassword,
   setConfirmPassword,
   resetForm,
-} = SignInSlice.actions;
+} = SignUpSlice.actions;
 
-export default SignInSlice.reducer;
+export default SignUpSlice.reducer;
