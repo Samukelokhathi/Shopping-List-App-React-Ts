@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 
 import type { AppDispatch } from "../../store/Store";
-import { logout } from "../../store/AuthSlice";
+// import { logout } from "../../store/AuthSlice";
 
 import styles from "./Navbar.module.css";
 
@@ -11,10 +11,10 @@ function Navbar() {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate("/login");
-    };
+    // const handleLogout = () => {
+    //     dispatch(logout());
+    //     navigate("/login");
+    // };
 
     return (
         <header className={styles.navbar}>
@@ -25,7 +25,7 @@ function Navbar() {
             <nav className={styles.navigation}>
                 <Button
                     className={`${styles.myListsButton} ${styles.active}`}
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/home")}
                 >
                     My lists
                 </Button>
@@ -39,7 +39,7 @@ function Navbar() {
 
                 <Button
                     className={styles.signOutButton}
-                    onClick={handleLogout}
+                    onClick={() => navigate("/")}
                 >
                     Sign out
                 </Button>

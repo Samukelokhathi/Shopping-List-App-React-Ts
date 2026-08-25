@@ -12,7 +12,7 @@ type InputProps = {
   placeholder?: string;
   type?: React.HTMLInputTypeAttribute;
   className?: string
-  required?: string
+  required?: boolean
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -24,7 +24,7 @@ export const Input: React.FC<InputProps> = ({
   error,
   name,
   type = "text",
-  className = "",
+  // className = "",
   required
 }) => {
   return (
@@ -33,12 +33,12 @@ export const Input: React.FC<InputProps> = ({
       <input
         name={name}
         id={id}
-        required
         style={style}
         type={type}
         value={value}
         onChange={onChange}
         className={inputStyle.input}
+        required={required}
       />
       {error && <span className={inputStyle["input-error"]}>{error}</span>}
     </div>

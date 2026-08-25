@@ -1,4 +1,4 @@
-import { Input } from "../../components/input/Input";
+import { Input } from "../../components/Input/Input";
 import styles from "./Login.module.css";
 import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
@@ -31,6 +31,7 @@ function Login() {
           label="Email Address"
           type="email"
           onChange={() => { }}
+          required
 
         />
 
@@ -40,6 +41,7 @@ function Login() {
           label="Password"
           type="password"
           onChange={() => { }}
+          required
         />
 
         <Button onClick={navToHome} type="submit">Sign in</Button>
