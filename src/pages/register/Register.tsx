@@ -56,6 +56,7 @@ function Register() {
             value={signUpData.name}
             onChange={(e) => dispatch(setName(e.target.value))}
             style={{ width: 240 }}
+            required
           />
           <Input
             id="Surname"
@@ -65,15 +66,17 @@ function Register() {
             value={signUpData.surname}
             onChange={(e) => dispatch(setSurname(e.target.value))}
             style={{ width: 240 }}
+            required
           />
         </div>
         <Input
           id="email"
           name="Email"
           label="Email"
-          type="text"
+          type="email"
           value={signUpData.email}
           onChange={(e) => dispatch(setEmail(e.target.value))}
+          required
         />
         <Input
           id="Cell number"
@@ -82,6 +85,7 @@ function Register() {
           type="text"
           value={signUpData.number}
           onChange={(e) => dispatch(setNumber(e.target.value))}
+          required
         />
         <div className={styles.passwordContainer}>
           <Input
@@ -92,7 +96,9 @@ function Register() {
             value={signUpData.password}
             onChange={(e) => dispatch(setPassword(e.target.value))}
             style={{ width: 240 }}
+            required
           />
+
           <Input
             id="Confirm password"
             name="Confirm password"
@@ -101,6 +107,7 @@ function Register() {
             type="password"
             onChange={(e) => dispatch(setConfirmPassword(e.target.value))}
             style={{ width: 240 }}
+            required
           />
         </div>
 

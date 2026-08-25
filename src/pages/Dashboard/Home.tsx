@@ -1,5 +1,5 @@
 import homeStyle from "../../pages/Dashboard/Home.module.css"
-import Navbar from "../../components/nav/NavBar";
+import Navbar from "../../components/Nav/NavBar";
 
 import Button from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
