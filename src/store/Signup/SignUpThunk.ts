@@ -10,9 +10,8 @@ export interface SignUpData {
     number: string;
     password: string;
     confirmPassword: string;
+
 }
-
-
 
 export const signup = createAsyncThunk(
     "signup",
@@ -25,11 +24,16 @@ export const signup = createAsyncThunk(
                     number: userData.number,
                     email: userData.email,
                     password: userData.password,
+                    lists: []
+
                 })
+
+            console.log("User saved:", response.data);
             return response.data;
 
         } catch (error) {
             console.error(error)
+
         }
 
     },

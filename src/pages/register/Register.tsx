@@ -3,7 +3,7 @@ import styles from "./Register.module.css";
 import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../../store/Store";
 
@@ -14,15 +14,16 @@ import {
   setEmail,
   setPassword,
   setConfirmPassword,
-  signup,
   resetForm,
 } from "../../store/Signup/SignUpSlice";
 
+import { signup } from "../../store/Signup/SignUpThunk"
+
 function Register() {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const signUpData = useSelector((state: RootState) => state.signUp);
-  console.log(signUpData.email);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,6 +32,7 @@ function Register() {
       await dispatch(signup(signUpData)).unwrap();
 
       dispatch(resetForm());
+      navigate("/")
     } catch (error) {
       console.error("Signup failed:", error);
     }

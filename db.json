@@ -1,36 +1,13 @@
 {
   "users": [
     {
-      "name": "Unknown",
-      "surname": "Sigma",
-      "number": "09484742853",
-      "email": "ndilibinomuribanji@gmail.com",
-      "password": "eeeeee",
-      "id": "k-JoWt1_ksg"
-    },
-    {
-      "name": "Unknown",
-      "surname": "Sigma",
-      "number": "09484742853",
-      "email": "ndilibinomuribanji@gmail.com",
-      "password": "09876",
-      "id": "_hJyCUROzBs"
-    },
-    {
-      "name": "",
-      "surname": "",
-      "number": "",
-      "email": "",
-      "password": "",
-      "id": "JsRMQ1ORfvQ"
-    },
-    {
-      "name": ",m m ",
-      "surname": ",.n.",
-      "number": ",m,mm,",
-      "email": ",,mm,",
-      "password": ",mm,,m",
-      "id": "sYTwbB4Qk2U"
+      "name": "Samukelo's",
+      "surname": "Blog",
+      "number": "sss",
+      "email": "sbkhathi005@gmail.com",
+      "password": "sssss",
+      "lists": [],
+      "id": "T_JiFwsDgro"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
