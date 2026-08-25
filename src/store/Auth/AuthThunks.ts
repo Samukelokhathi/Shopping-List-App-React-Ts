@@ -9,7 +9,7 @@ export interface LoginData {
 
 }
 
-export const signup = createAsyncThunk(
+export const login = createAsyncThunk(
     "auth/login",
 
     async (loginData: LoginData) => {

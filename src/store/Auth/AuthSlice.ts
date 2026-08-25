@@ -1,46 +1,43 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { User } from "../LoginSlice"
+import { createSlice } from "@reduxjs/toolkit";
+import type { User } from "../../types/User"
+import { login } from "./AuthThunks"
 
-interface AuthState {
+
+interface LoginState {
     user: User | null;
     isAuthenticated: boolean;
+    isLoading: boolean;
+    error: string | null;
 }
 
-const savedUser = localStorage.getItem("user");
+const initialState: LoginState = {
+    user: null,
+    isAuthenticated: false,
+    isLoading: false,
+    error: null,
+}
 
-const initialState: AuthState = {
-    user: savedUser ? JSON.parse(savedUser) : null,
-    isAuthenticated: savedUser !== null,
-};
-
-const authSlice = createSlice({
+const AuthSlice = createSlice({
     name: "auth",
 
     initialState,
 
     reducers: {
-        setUser(state, action: PayloadAction<User>) {
-            state.user = action.payload;
-            state.isAuthenticated = true;
-
-            localStorage.setItem(
-                "user",
-                JSON.stringify(action.payload)
-            );
-        },
-
         logout(state) {
             state.user = null;
-            state.isAuthenticated = false;
+            state.isAuthenticated = false
+            state.error = null
+        }
+    },
 
-            localStorage.removeItem("user");
-        },
+    extraReducers: (builder) => {
+        builder
+
+            .addCase(login.pending, (state) => {
+                state.isLoading = true;
+                state.error = null
+            })
+
     },
 });
 
-export const {
-    setUser,
-    logout,
-} = authSlice.actions;
-
-export default authSlice.reducer;
