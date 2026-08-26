@@ -8,7 +8,16 @@
       "password": "sssss",
       "lists": [],
       "id": "T_JiFwsDgro"
+    },
+    {
+      "name": "Bayanda",
+      "surname": "Khathi",
+      "number": "0987654321",
+      "email": "baya@gmail.com",
+      "password": "baya",
+      "lists": [],
+      "id": "H2fvCO68Etk"
     }
   ],
-  "$schema": "./node_modules/json-server/schema.json"
-}
+  "$schema": "./node_modules/json -server/schema.json"
+} 

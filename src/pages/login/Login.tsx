@@ -1,32 +1,24 @@
-import { Input } from "../../components/Input/Input";
+import { Input } from "../../ui/Input/Input";
 import styles from "./Login.module.css";
-import Button from "../../components/Button/Button";
-import { Text } from "../../components/Text/Text";
-
+import Button from "../../ui/Button/Button";
+import { Text } from "../../ui/Text/Text";
 
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import type { RootState, AppDispatch } from "../../store/Store";
-import { login } from '../../store/Auth/AuthThunks'
+import { login } from "../../store/Login/LoginThunks";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
-
-
 function Login() {
-
   const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const auth = useSelector(
-    (state: RootState) => state.auth
-  );
+  const auth = useSelector((state: RootState) => state.auth);
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -34,17 +26,14 @@ function Login() {
         login({
           email,
           password,
-        })
+        }),
       ).unwrap();
 
       navigate("/home");
-
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
-
-
 
   return (
     <div className={styles.page}>
@@ -62,9 +51,10 @@ function Login() {
           name="email"
           label="Email Address"
           type="email"
-          onChange={(e) => { setEmail(e.target.value) }}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
           required
-
         />
 
         <Input
@@ -72,15 +62,13 @@ function Login() {
           name="password"
           label="Password"
           type="password"
-          onChange={(e) => { setPassword(e.target.value) }}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
           required
         />
 
-        {auth.error && (
-          <p className={styles.error}>
-            {auth.error}
-          </p>
-        )}
+        {auth.error && <p className={styles.error}>{auth.error}</p>}
 
         <Button type="submit">Sign in</Button>
 
