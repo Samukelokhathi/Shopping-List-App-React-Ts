@@ -6,7 +6,7 @@ import { Text } from "../../ui/Text/Text";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import type { RootState, AppDispatch } from "../../store/Store";
-import { login } from "../../store/Login/LoginThunks";
+import { login } from "../../store/Auth/AuthThunks";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
