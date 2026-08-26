@@ -11,7 +11,6 @@ function Navbar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // dispatch(logout());
     navigate("/");
   };
 
@@ -34,7 +33,7 @@ function Navbar() {
           Profile
         </Button>
 
-        <Button className={styles.signOutButton} onClick={() => handleLogout}>
+        <Button className={styles.signOutButton} onClick={handleLogout}>
           Sign out
         </Button>
       </nav>
