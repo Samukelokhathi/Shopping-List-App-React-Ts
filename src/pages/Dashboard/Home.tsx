@@ -36,18 +36,19 @@ const Home = () => {
           >
             + New list
           </Button>
-        </section>
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          title="Creating Shopping list"
-        >
-          <form>
-            <Input type="text" />
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Creating Shopping list"
+          >
+            <form>
+              <label className={homeStyle.listItemName}>List Item Name</label>
+              <Input type="text" />
 
-            <Button type="submit" children={"Create List"} />
-          </form>
-        </Modal>
+              <Button type="submit" children={"Create List"} />
+            </form>
+          </Modal>
+        </section>
 
         <section className={homeStyle.controls}>
           <Input
