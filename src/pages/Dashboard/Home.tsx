@@ -5,11 +5,14 @@ import Button from "../../ui/Button/Button";
 import { Input } from "../../ui/Input/Input";
 import { Text } from "../../ui/Text/Text";
 
+import Modal from "../../components/Modal/Modal";
+
 import { useState } from "react";
 
 const Home = () => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("default");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className={homeStyle.container}>
       <Navbar />
@@ -29,13 +32,22 @@ const Home = () => {
 
           <Button
             className={homeStyle.newListButton}
-            onClick={() => {
-              console.log("New list btn clicked");
-            }}
+            onClick={() => setIsModalOpen(true)}
           >
             + New list
           </Button>
         </section>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Creating Shopping list"
+        >
+          <form>
+            <Input type="text" />
+
+            <Button type="submit" children={"Create List"} />
+          </form>
+        </Modal>
 
         <section className={homeStyle.controls}>
           <Input
