@@ -2,16 +2,48 @@ import { Input } from "../../components/Input/Input";
 import styles from "./Login.module.css";
 import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
-import { NavLink } from "react-router-dom";
 
+
+import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import type { RootState, AppDispatch } from "../../store/Store";
+import { login } from '../../store/Auth/AuthThunks
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+
+
 
 function Login() {
 
+  const dispatch = useDispatch<AppDispatch>();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
-  const navToHome = () => {
-    navigate("/home")
-  }
+  const auth = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    try {
+      await dispatch(
+        login({
+          email,
+          password,
+        })
+      ).unwrap();
+
+      navigate("/home");
+
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
 
 
   return (
@@ -24,7 +56,7 @@ function Login() {
         />
       </div>
 
-      <form className={styles.card}>
+      <form className={styles.card} onSubmit={handleSubmit}>
         <Input
           id="email"
           name="email"
