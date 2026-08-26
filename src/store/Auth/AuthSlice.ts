@@ -52,6 +52,27 @@ const AuthSlice = createSlice({
         state.isAuthenticated = false;
 
         state.error = (action.payload as string) || "Login failed";
+      })
+
+      // Add shopping list
+
+      .addCase(addShoppingList.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+
+      .addCase(addShoppingList.fulfilled, (state, action) => {
+        state.isLoading = false;
+
+        // replace current user with update user
+        state.user = action.payload;
+
+        state.error = null;
+      })
+
+      .addCase(addShoppingList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to create shopping list";
       });
   },
 });
