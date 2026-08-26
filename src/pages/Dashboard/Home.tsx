@@ -27,7 +27,12 @@ const Home = () => {
             whoever is doing the shop.
           </Text>
 
-          <Button className={homeStyle.newListButton} onClick={() => {}}>
+          <Button
+            className={homeStyle.newListButton}
+            onClick={() => {
+              console.log("New list btn clicked");
+            }}
+          >
             + New list
           </Button>
         </section>

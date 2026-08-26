@@ -7,7 +7,6 @@ import Button from "../../ui/Button/Button";
 import styles from "./Navbar.module.css";
 
 function Navbar() {
-  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleLogout = () => {
