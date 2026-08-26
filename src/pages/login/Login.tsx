@@ -7,7 +7,7 @@ import { Text } from "../../components/Text/Text";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import type { RootState, AppDispatch } from "../../store/Store";
-import { login } from '../../store/Auth/AuthThunks
+import { login } from '../../store/Auth/AuthThunks'
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
@@ -62,7 +62,7 @@ function Login() {
           name="email"
           label="Email Address"
           type="email"
-          onChange={() => { }}
+          onChange={(e) => { setEmail(e.target.value) }}
           required
 
         />
@@ -72,11 +72,17 @@ function Login() {
           name="password"
           label="Password"
           type="password"
-          onChange={() => { }}
+          onChange={(e) => { setPassword(e.target.value) }}
           required
         />
 
-        <Button onClick={navToHome} type="submit">Sign in</Button>
+        {auth.error && (
+          <p className={styles.error}>
+            {auth.error}
+          </p>
+        )}
+
+        <Button type="submit">Sign in</Button>
 
         <p className={styles.registerText}>
           New here?{" "}
