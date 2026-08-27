@@ -15,9 +15,31 @@
       "number": "0987654321",
       "email": "baya@gmail.com",
       "password": "baya",
-      "lists": [],
+      "lists": [
+        {
+          "id": "1787822957510",
+          "name": "fsaf",
+          "numberOfItems": 2,
+          "note": "fas"
+        },
+        {
+          "id": "1787822978277",
+          "name": "fasfas",
+          "numberOfItems": 11,
+          "note": "1ffq"
+        }
+      ],
       "id": "H2fvCO68Etk"
+    },
+    {
+      "name": "Syabonga",
+      "surname": "Khanyile",
+      "number": "0987654321",
+      "email": "sya@gmail.com",
+      "password": "12345",
+      "lists": [],
+      "id": "yNHlr0csTBg"
     }
   ],
-  "$schema": "./node_modules/json -server/schema.json"
-} 
+  "$schema": "./node_modules/json-server/schema.json"
+}

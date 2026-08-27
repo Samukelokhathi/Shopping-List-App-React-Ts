@@ -8,9 +8,15 @@ import { Text } from "../../ui/Text/Text";
 import Modal from "../../components/Modal/Modal";
 import { useState } from "react";
 
+import ShoppingListCard from "../../components/ShoppingListCard/ShoppingListCard";
+
 import type { RootState, AppDispatch } from "../../store/Store";
 
 import { addShoppingList } from "../../store/ShoppingList/ShoppingListThunks";
+
+import type { ShoppingList } from "../../types/User";
+
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -49,7 +55,13 @@ const Home = () => {
               <Input type="text" />
               <label className={homeStyle.listItemName}>Optional Note</label>
               <Input type="textarea" />n m
-              <Button type="submit" children={"Create List"} />
+              <Button
+                type="submit"
+                children={"Create List"}
+                onClick={() => {
+                  console.log("list created");
+                }}
+              />
             </form>
           </Modal>
         </section>
@@ -69,12 +81,14 @@ const Home = () => {
               onChange={(event) => setSort(event.target.value)}
               className={homeStyle.sortSelect}
             >
-              <option value="default">Sort by</option>
               <option value="name">Name</option>
-              <option value="items">Items</option>
+              <option value="items">Date</option>
             </select>
           </div>
         </section>
+        <p>card list</p>
+
+        <section></section>
       </main>
     </div>
   );
