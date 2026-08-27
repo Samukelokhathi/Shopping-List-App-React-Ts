@@ -1,17 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import type { User, ShoppingList } from "../../types/User";
+import type { User, ShoppingList } from "../../../types/User";
 
 interface AddListData {
   userId: number;
   list: ShoppingList;
 }
 
-export const addShoppingList = createAsyncThunk(
+export const addShoppingList = createAsyncThunk<
+  User,
+  AddListData,
+  { rejectValue: string }
+>(
   "shoppingList/add",
 
-  async ({ userId, list }: AddListData, { rejectWithValue }) => {
+  async ({ userId, list }, { rejectWithValue }) => {
     try {
       // Get the logged-in user
       const response = await axios.get<User>(

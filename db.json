@@ -5,7 +5,7 @@
       "surname": "Blog",
       "number": "sss",
       "email": "sbkhathi005@gmail.com",
-      "password": "sssss",
+      "password": "12345",
       "lists": [],
       "id": "T_JiFwsDgro"
     },
@@ -21,12 +21,6 @@
           "name": "fsaf",
           "numberOfItems": 2,
           "note": "fas"
-        },
-        {
-          "id": "1787822978277",
-          "name": "fasfas",
-          "numberOfItems": 11,
-          "note": "1ffq"
         }
       ],
       "id": "H2fvCO68Etk"
@@ -39,6 +33,15 @@
       "password": "12345",
       "lists": [],
       "id": "yNHlr0csTBg"
+    },
+    {
+      "name": "Testing",
+      "surname": "testing",
+      "number": "0986543",
+      "email": "testing@gmail.com",
+      "password": "098765",
+      "lists": [],
+      "id": "GXefay6nRxo"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -33,3 +33,8 @@
 .listItemName {
     color: black;
 }
+
+.lists {
+    display: flex;
+    gap: 1rem;
+}

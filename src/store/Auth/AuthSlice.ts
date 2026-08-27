@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { User } from "../../types/User";
 import { login } from "./AuthThunks";
 
-import { addShoppingList } from "../ShoppingList/ShoppingListThunks";
+import { addShoppingList } from "./ShoppingList/ShoppingListThunks";
 
 interface AuthState {
   user: User | null;

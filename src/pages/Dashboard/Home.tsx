@@ -12,7 +12,7 @@ import ShoppingListCard from "../../components/ShoppingListCard/ShoppingListCard
 
 import type { RootState, AppDispatch } from "../../store/Store";
 
-import { addShoppingList } from "../../store/ShoppingList/ShoppingListThunks";
+import { addShoppingList } from "../../store/Auth/ShoppingList/ShoppingListThunks";
 
 import type { ShoppingList } from "../../types/User";
 

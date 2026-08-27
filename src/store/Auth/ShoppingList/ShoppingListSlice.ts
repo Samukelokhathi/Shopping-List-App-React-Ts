@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-import type { ShoppingList } from "../../types/User";
+import type { ShoppingList } from "../../../types/User";
 
 interface ShoppingListState {
   lists: ShoppingList[];
