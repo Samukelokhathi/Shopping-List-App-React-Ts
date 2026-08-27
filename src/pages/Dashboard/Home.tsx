@@ -6,8 +6,11 @@ import { Input } from "../../ui/Input/Input";
 import { Text } from "../../ui/Text/Text";
 
 import Modal from "../../components/Modal/Modal";
-
 import { useState } from "react";
+
+import type { RootState, AppDispatch } from "../../store/Store";
+
+import { addShoppingList } from "../../store/ShoppingList/ShoppingListThunks";
 
 const Home = () => {
   const [search, setSearch] = useState("");
