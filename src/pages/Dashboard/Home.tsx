@@ -20,8 +20,19 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [search, setSearch] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
   const [sort, setSort] = useState("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Get logged-in user
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const [listName, setListName] = useState("");
+
+  const [numberOfItems, setNumberOfItems] = useState("");
+
+  const [note, setNote] = useState("");
   return (
     <div className={homeStyle.container}>
       <Navbar />
