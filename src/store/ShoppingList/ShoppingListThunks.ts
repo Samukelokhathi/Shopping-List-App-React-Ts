@@ -4,7 +4,7 @@ import axios from "axios";
 import type { User, ShoppingList } from "../../types/User";
 
 interface AddListData {
-  userId: string;
+  userId: number;
   list: ShoppingList;
 }
 

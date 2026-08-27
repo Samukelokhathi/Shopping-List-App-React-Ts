@@ -44,6 +44,7 @@ const Home = () => {
             <form>
               <label className={homeStyle.listItemName}>List Item Name</label>
               <Input type="text" />
+              <label className={homeStyle.listItemName}>Optional Note</label>
               <Input type="textarea" />n m
               <Button type="submit" children={"Create List"} />
             </form>

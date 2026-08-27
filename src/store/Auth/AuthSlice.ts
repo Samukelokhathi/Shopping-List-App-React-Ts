@@ -72,7 +72,8 @@ const AuthSlice = createSlice({
 
       .addCase(addShoppingList.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload || "Failed to create shopping list";
+        state.error =
+          (action.payload as string) || "Failed to create shopping list";
       });
   },
 });
