@@ -6,7 +6,7 @@ import { Text } from "../../ui/Text/Text";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import type { RootState, AppDispatch } from "../../store/Store";
-import { login } from "../../store/Auth/AuthThunks";
+import { login } from "../../store/Auth/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
@@ -16,7 +16,7 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const auth = useSelector((state: RootState) => state.auth);
+  const auth = useSelector((state: RootState) => state.login);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

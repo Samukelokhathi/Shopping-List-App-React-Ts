@@ -1,107 +1,35 @@
 {
   "users": [
     {
-      "name": "sya",
-      "surname": "syabonga",
-      "number": "098765",
-      "email": "sya@gmail.com",
-      "password": "12345",
-      "lists": [
-        {
-          "id": "1787834702351",
-          "name": "as",
-          "numberOfItems": 0,
-          "note": "sa"
-        },
-        {
-          "id": "1787834706911",
-          "name": "sas",
-          "numberOfItems": 0,
-          "note": "sa"
-        }
-      ],
-      "id": "ENlpoWIEXiA"
-    },
-    {
       "name": "Samukelo",
       "surname": "Khathi",
-      "number": "12345",
+      "number": "1234567890",
       "email": "sbkhathi005@gmail.com",
-      "password": "11111",
-      "lists": [
-        {
-          "id": "1787835582742",
-          "name": "name",
-          "numberOfItems": 0,
-          "note": "ss"
-        },
-        {
-          "id": "1787835591933",
-          "name": "samkelo",
-          "numberOfItems": 0,
-          "note": ""
-        },
-        {
-          "id": "1787909362959",
-          "name": "saS",
-          "numberOfItems": 0,
-          "note": "Sas"
-        }
-      ],
-      "id": "HCdaOMmIlRo"
-    },
-    {
-      "name": "new ",
-      "surname": "user",
-      "number": "0987654321",
-      "email": "newuser@gmail.com",
       "password": "12345",
-      "lists": [
-        {
-          "id": "1787900066318",
-          "name": "new list ",
-          "numberOfItems": 0,
-          "note": ""
-        },
-        {
-          "id": "1787900079710",
-          "name": "new user",
-          "numberOfItems": 0,
-          "note": "note"
-        },
-        {
-          "id": "1787900118422",
-          "name": "baking",
-          "numberOfItems": 0,
-          "note": ""
-        }
-      ],
-      "id": "v8656wjsdko"
+      "lists": [],
+      "id": "H7wRTnB_Fqw"
     },
     {
       "name": "Bayanda",
-      "surname": "Nzimande",
-      "number": "1234",
+      "surname": "Payu",
+      "number": "1234567890",
       "email": "baya@gmail.com",
       "password": "12345",
       "lists": [
         {
-          "id": "1787909522791",
-          "name": "baya",
+          "id": "1787915968028",
+          "name": "cars",
           "numberOfItems": 0,
-          "note": "note"
+          "note": ""
+        },
+        {
+          "id": "1787915978764",
+          "name": "people",
+          "numberOfItems": 0,
+          "note": ""
         }
       ],
-      "id": "UMtFjgIB86Y"
-    },
-    {
-      "name": "Samukelo",
-      "surname": "Khathi",
-      "number": "0986543",
-      "email": "sbkhathi@gmail.com",
-      "password": "12345",
-      "lists": [],
-      "id": "n0S9Z8vscXo"
+      "id": "g7GdscMh8SM"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

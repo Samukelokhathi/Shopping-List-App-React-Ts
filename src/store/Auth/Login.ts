@@ -10,19 +10,21 @@ export interface LoginData {
   password: string;
 }
 // AUTH STATE
-interface AuthState {
+interface LogInState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
 }
 
-const initialState: AuthState = {
+const initialState: LogInState = {
   user: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
 };
+
+// LOGIN THUNK
 
 export const login = createAsyncThunk<User, LoginData, { rejectValue: string }>(
   "auth/login",
@@ -56,8 +58,42 @@ export const login = createAsyncThunk<User, LoginData, { rejectValue: string }>(
   },
 );
 
-const AuthSlice = createSlice({
-  name: "auth",
+// GET LOGGED-IN USER
+
+export const getLoggedInUser = createAsyncThunk<
+  User,
+  void,
+  { rejectValue: string }
+>(
+  "auth/getLoggedInUser",
+
+  async (_, { rejectWithValue }) => {
+    try {
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        return rejectWithValue("No logged-in user");
+      }
+
+      const response = await axios.get<User>(
+        `http://localhost:3000/users/${userId}`,
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+
+      localStorage.removeItem("userId");
+
+      return rejectWithValue("Unable to restore user");
+    }
+  },
+);
+
+// AUTH SLICE
+
+const Login = createSlice({
+  name: "login",
 
   initialState,
 
@@ -66,6 +102,9 @@ const AuthSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       state.error = null;
+
+      // Remove saved user
+      localStorage.removeItem("userId");
     },
   },
 
@@ -99,6 +138,29 @@ const AuthSlice = createSlice({
         state.error = action.payload || "Login failed";
       })
 
+      //  RESTORE USER
+      .addCase(getLoggedInUser.pending, (state) => {
+        state.isLoading = true;
+      })
+
+      .addCase(getLoggedInUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+
+        state.user = action.payload;
+
+        state.isAuthenticated = true;
+
+        state.error = null;
+      })
+
+      .addCase(getLoggedInUser.rejected, (state) => {
+        state.isLoading = false;
+
+        state.user = null;
+
+        state.isAuthenticated = false;
+      })
+
       // ADD SHOPPING LIST
       .addCase(addShoppingList.pending, (state) => {
         state.isLoading = true;
@@ -122,6 +184,6 @@ const AuthSlice = createSlice({
   },
 });
 
-export const { logout } = AuthSlice.actions;
+export const { logout } = Login.actions;
 
-export default AuthSlice.reducer;
+export default Login.reducer;

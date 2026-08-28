@@ -6,7 +6,7 @@ import { Input } from "../../ui/Input/Input";
 import { Text } from "../../ui/Text/Text";
 
 import Modal from "../../components/Modal/Modal";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import ShoppingListCard from "../../components/ShoppingListCard/ShoppingListCard";
 
@@ -19,7 +19,7 @@ import type { ShoppingList } from "../../types/User";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../store/Auth/AuthThunks";
+import { login } from "../../store/Auth/Login";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -33,7 +33,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   // Get logged-in user
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.login.user);
   useEffect(() => {
     // Only try to log in if you have credentials and are not already logged in
     if (user?.email && user?.password) {
