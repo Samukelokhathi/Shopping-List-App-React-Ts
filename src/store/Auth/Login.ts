@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { User } from "../../types/User";
 import { addShoppingList } from "../ShoppingList/ShoppingList";
+import { deleteShoppingList } from "../ShoppingList/ShoppingList";
 
 // LOGIN DATA
 export interface LoginData {
@@ -188,6 +189,13 @@ const Login = createSlice({
 
         state.error = action.payload || "Failed to create shopping list";
       });
+
+    // DELETE SHOPPING LIST
+    builder.addCase(deleteShoppingList.fulfilled, (state, action) => {
+      if (state.user) {
+        state.user = action.payload;
+      }
+    });
   },
 });
 

@@ -12,7 +12,10 @@ import ShoppingListCard from "../../components/ShoppingListCard/ShoppingListCard
 
 import type { RootState, AppDispatch } from "../../store/Store";
 
-import { addShoppingList } from "../../store/ShoppingList/ShoppingList";
+import {
+  addShoppingList,
+  deleteShoppingList,
+} from "../../store/ShoppingList/ShoppingList";
 
 import type { ShoppingList } from "../../types/User";
 
@@ -59,7 +62,7 @@ const Home = () => {
     }
 
     // Create new list
-    const newList: ShoppingList = {
+    const newList: string = {
       id: Date.now().toString(),
 
       name: listName,
@@ -113,6 +116,24 @@ const Home = () => {
 
     return 0;
   });
+
+  const handleDelete = async (listId: string) => {
+    if (!user) {
+      console.log("No user is logged in");
+      return;
+    }
+
+    try {
+      await dispatch(
+        deleteShoppingList({
+          userId: user.id,
+          listId: listId,
+        }),
+      ).unwrap();
+    } catch (error) {
+      console.error("Failed to delete list:", error);
+    }
+  };
 
   return (
     <div className={homeStyle.container}>
@@ -200,6 +221,7 @@ const Home = () => {
                   console.log("Edit:", list);
                 }}
                 onDelete={(id) => {
+                  handleDelete(id);
                   console.log("Delete:", id);
                 }}
                 onClick={(id) => {

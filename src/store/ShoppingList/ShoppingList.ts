@@ -9,6 +9,13 @@ interface AddListData {
   list: ShoppingList;
 }
 
+// DELETE LIST DATA
+
+interface DeleteListData {
+  userId: string;
+  listId: string;
+}
+
 // SHOPPING LIST STATE
 
 interface ShoppingListState {
@@ -88,6 +95,36 @@ export const getShoppingLists = createAsyncThunk<
   },
 );
 
+// DELETE SHOPPING LIST THUNK
+
+export const deleteShoppingList = createAsyncThunk<
+  User,
+  DeleteListData,
+  { rejectValue: string }
+>("shoppingList/delete", async ({ userId, listId }, { rejectWithValue }) => {
+  try {
+    const response = await axios.get<User>(
+      `http://localhost:3000/users/${userId}`,
+    );
+    const user = response.data;
+
+    const updatedLists = user.lists.filter((list) => list.id !== listId);
+
+    const updatedUser: User = {
+      ...user,
+      lists: updatedLists,
+    };
+
+    const updateResponse = await axios.put<User>(
+      `http://localhost:3000/users/${userId}`,
+      updatedUser,
+    );
+    return updateResponse.data;
+  } catch (error) {
+    console.error(error);
+    return rejectWithValue("Failed to delete shopping list");
+  }
+});
 // SHOPPING LIST SLICE
 
 const ShoppingListSlice = createSlice({
@@ -101,51 +138,56 @@ const ShoppingListSlice = createSlice({
     },
   },
 
+  // GetShoppingLists
   extraReducers: (builder) => {
     builder
       .addCase(getShoppingLists.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-
       .addCase(getShoppingLists.fulfilled, (state, action) => {
         state.isLoading = false;
-
         state.lists = action.payload.lists;
         state.error = null;
       })
-
       .addCase(getShoppingLists.rejected, (state, action) => {
         state.isLoading = false;
-
         state.error = action.payload || "Failed to fetch shopping lists";
       });
+
     // ADD SHOPPING LIST
-
     builder
-
       .addCase(addShoppingList.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-
       .addCase(addShoppingList.fulfilled, (state, action) => {
         state.isLoading = false;
-
         // The API returns the updated user.
         // Get the updated lists from that user.
-
         state.lists = action.payload.lists;
-
         state.error = null;
       })
-
       .addCase(addShoppingList.rejected, (state, action) => {
         state.isLoading = false;
-
         state.error = action.payload || "Failed to create shopping list";
       });
-    // ADD SHOPPING LIST
+
+    // DELETE SHOPPING LIST
+    builder
+      .addCase(deleteShoppingList.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteShoppingList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.lists = action.payload.lists;
+        state.error = null;
+      })
+      .addCase(deleteShoppingList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to delete shopping list";
+      });
   },
 });
 
