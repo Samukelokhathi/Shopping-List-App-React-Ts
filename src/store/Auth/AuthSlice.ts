@@ -1,11 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
-
-import type { User } from "../../types/User";
-
-import { login } from "./AuthThunks";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { addShoppingList } from "../ShoppingList/ShoppingListThunks";
+import axios from "axios";
+import type { User } from "../../types/User";
 
+// LOGIN DATA
+export interface LoginData {
+  email: string;
+  password: string;
+}
+// AUTH STATE
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
@@ -19,6 +23,38 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
 };
+
+export const login = createAsyncThunk<User, LoginData, { rejectValue: string }>(
+  "auth/login",
+
+  async (loginData, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<User[]>("http://localhost:3000/users");
+
+      const loggedUser = response.data.find(
+        (user) =>
+          user.email === loginData.email &&
+          user.password === loginData.password,
+      );
+
+      if (!loggedUser) {
+        return rejectWithValue("Invalid email or password");
+      }
+
+      // Save logged-in user's ID
+      // so we can find this user again
+      // after refreshing the page.
+
+      localStorage.setItem("userId", loggedUser.id);
+
+      return loggedUser;
+    } catch (error) {
+      console.error(error);
+
+      return rejectWithValue("Unable to connect to server");
+    }
+  },
+);
 
 const AuthSlice = createSlice({
   name: "auth",
