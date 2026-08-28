@@ -13,18 +13,18 @@ export const login = createAsyncThunk<User, LoginData, { rejectValue: string }>(
 
   async (LoginData, { rejectWithValue }) => {
     try {
-      const response = await axios.get<User[]>("http://localhost:3000/users", {
-        params: {
-          email: LoginData.email,
-          password: LoginData.password,
-        },
-      });
+      const response = await axios.get<User[]>("http://localhost:3000/users");
+      const loggedUser = response.data.find(
+        (user) =>
+          user.email === LoginData.email &&
+          user.password === LoginData.password,
+      );
 
-      if (response.data.length === 0) {
+      if (!loggedUser) {
         return rejectWithValue("Invalid email or password");
       }
 
-      return response.data[0];
+      return loggedUser;
     } catch (error) {
       console.error(error);
       return rejectWithValue("Unable to connect to server");

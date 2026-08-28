@@ -6,19 +6,20 @@ import { Input } from "../../ui/Input/Input";
 import { Text } from "../../ui/Text/Text";
 
 import Modal from "../../components/Modal/Modal";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import ShoppingListCard from "../../components/ShoppingListCard/ShoppingListCard";
 
 import type { RootState, AppDispatch } from "../../store/Store";
 
-import { addShoppingList } from "../../store/Auth/ShoppingList/ShoppingListThunks";
+import { addShoppingList } from "../../store/ShoppingList/ShoppingListThunks";
 
 import type { ShoppingList } from "../../types/User";
 
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../store/Auth/AuthThunks";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -33,6 +34,12 @@ const Home = () => {
 
   // Get logged-in user
   const user = useSelector((state: RootState) => state.auth.user);
+  useEffect(() => {
+    // Only try to log in if you have credentials and are not already logged in
+    if (user?.email && user?.password) {
+      dispatch(login({ email: user.email, password: user.password }));
+    }
+  }, []);
 
   const [listName, setListName] = useState("");
 

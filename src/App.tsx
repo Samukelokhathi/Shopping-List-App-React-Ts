@@ -1,5 +1,5 @@
 import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
+import Register from "./pages/Signup/Register";
 import Home from "./pages/Dashboard/Home";
 import { Route, Routes } from "react-router-dom";
 

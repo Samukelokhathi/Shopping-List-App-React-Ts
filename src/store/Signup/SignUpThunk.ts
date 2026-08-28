@@ -12,23 +12,50 @@ export interface SignUpData {
   confirmPassword: string;
 }
 
-export const signup = createAsyncThunk(
-  "signup",
-  async (userData: SignUpData) => {
+export const signup = createAsyncThunk<
+  User,
+  SignUpData,
+  { rejectValue: string }
+>(
+  "signup/create",
+
+  async (userData, { rejectWithValue }) => {
     try {
+      // Check if email already exists
+      const existingUsers = await axios.get<User[]>(
+        "http://localhost:3000/users",
+        {
+          params: {
+            email: userData.email,
+          },
+        },
+      );
+
+      if (existingUsers.data.length > 0) {
+        return rejectWithValue("Email is already registered");
+      }
+
+      // Check passwords
+      if (userData.password !== userData.confirmPassword) {
+        return rejectWithValue("Passwords do not match");
+      }
+
       const response = await axios.post<User>("http://localhost:3000/users", {
         name: userData.name,
         surname: userData.surname,
         number: userData.number,
         email: userData.email,
         password: userData.password,
+
+        // Every new user starts with no lists
         lists: [],
       });
 
-      console.log("User saved:", response.data);
       return response.data;
     } catch (error) {
       console.error(error);
+
+      return rejectWithValue("Unable to create account");
     }
   },
 );

@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import type { User } from "../../types/User";
+
 import { login } from "./AuthThunks";
 
-import { addShoppingList } from "./ShoppingList/ShoppingListThunks";
+import { addShoppingList } from "../ShoppingList/ShoppingListThunks";
 
 interface AuthState {
   user: User | null;
@@ -34,6 +36,7 @@ const AuthSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
+      // LOGIN
       .addCase(login.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -41,21 +44,26 @@ const AuthSlice = createSlice({
 
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
+
         state.user = action.payload;
+        console.log(state.user);
+
         state.isAuthenticated = true;
+
         state.error = null;
       })
 
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
+
         state.user = null;
+
         state.isAuthenticated = false;
 
-        state.error = (action.payload as string) || "Login failed";
+        state.error = action.payload || "Login failed";
       })
 
-      // Add shopping list
-
+      // ADD SHOPPING LIST
       .addCase(addShoppingList.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -64,7 +72,7 @@ const AuthSlice = createSlice({
       .addCase(addShoppingList.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        // replace current user with update user
+        // Updated user contains new list
         state.user = action.payload;
 
         state.error = null;
@@ -72,8 +80,8 @@ const AuthSlice = createSlice({
 
       .addCase(addShoppingList.rejected, (state, action) => {
         state.isLoading = false;
-        state.error =
-          (action.payload as string) || "Failed to create shopping list";
+
+        state.error = action.payload || "Failed to create shopping list";
       });
   },
 });

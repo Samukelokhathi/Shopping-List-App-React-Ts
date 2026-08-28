@@ -15,15 +15,17 @@ import {
   setPassword,
   setConfirmPassword,
   resetForm,
-} from "../../store/Signup/SignUpSlice";
+} from "../../store/Signup/SignUp";
 
-import { signup } from "../../store/Signup/SignUpThunk";
+import { signup } from "../../store/Signup/SignUp";
 
 function Register() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const signUpData = useSelector((state: RootState) => state.signUp);
+  const isLoading = signUpData.isLoading;
+  const error = signUpData.error;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -112,8 +114,11 @@ function Register() {
             required
           />
         </div>
+        {error && <p>{error}</p>}
 
-        <Button type="submit">Sign up</Button>
+        <Button type="submit" disabled={isLoading}>
+          Sign up
+        </Button>
 
         <p className={styles.registerText}>
           Already registered?{" "}

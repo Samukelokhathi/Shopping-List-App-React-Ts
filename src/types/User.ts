@@ -1,10 +1,12 @@
-export interface ListItem {
+export interface User {
   id: string;
   name: string;
-  quantity: number;
-  completed: boolean;
+  surname: string;
+  number: string;
+  email: string;
+  password: string;
+  lists: ShoppingList[];
 }
-
 export interface ShoppingList {
   id: string;
   name: string;
@@ -13,12 +15,9 @@ export interface ShoppingList {
   items: ListItem[];
 }
 
-export interface User {
-  id: number;
+export interface ListItem {
+  id: string;
   name: string;
-  surname: string;
-  number: string;
-  email: string;
-  password: string;
-  lists: ShoppingList[];
+  quantity: number;
+  completed: boolean;
 }
