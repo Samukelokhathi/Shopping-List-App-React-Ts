@@ -6,7 +6,32 @@
       "number": "1234567890",
       "email": "sbkhathi005@gmail.com",
       "password": "12345",
-      "lists": [],
+      "lists": [
+        {
+          "id": "1787918997599",
+          "name": "gg",
+          "numberOfItems": 0,
+          "note": ""
+        },
+        {
+          "id": "1787919002414",
+          "name": "ggg",
+          "numberOfItems": 0,
+          "note": "gg"
+        },
+        {
+          "id": "1787919009191",
+          "name": "ggf",
+          "numberOfItems": 0,
+          "note": ""
+        },
+        {
+          "id": "1787919082079",
+          "name": "hello",
+          "numberOfItems": 0,
+          "note": ""
+        }
+      ],
       "id": "H7wRTnB_Fqw"
     },
     {

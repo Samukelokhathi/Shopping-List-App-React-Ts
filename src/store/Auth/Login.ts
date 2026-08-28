@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { addShoppingList } from "../ShoppingList/ShoppingListThunks";
 import axios from "axios";
 import type { User } from "../../types/User";
+import { addShoppingList } from "../ShoppingList/ShoppingList";
 
 // LOGIN DATA
 export interface LoginData {
@@ -59,6 +59,7 @@ export const login = createAsyncThunk<User, LoginData, { rejectValue: string }>(
 );
 
 // GET LOGGED-IN USER
+// This runs when the page is refreshed.
 
 export const getLoggedInUser = createAsyncThunk<
   User,
@@ -136,9 +137,12 @@ const Login = createSlice({
         state.isAuthenticated = false;
 
         state.error = action.payload || "Login failed";
-      })
+      });
 
-      //  RESTORE USER
+    //  RESTORE USER
+
+    builder
+
       .addCase(getLoggedInUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -159,9 +163,12 @@ const Login = createSlice({
         state.user = null;
 
         state.isAuthenticated = false;
-      })
+      });
 
-      // ADD SHOPPING LIST
+    // ADD SHOPPING LIST
+
+    builder
+
       .addCase(addShoppingList.pending, (state) => {
         state.isLoading = true;
         state.error = null;

@@ -12,40 +12,41 @@ import ShoppingListCard from "../../components/ShoppingListCard/ShoppingListCard
 
 import type { RootState, AppDispatch } from "../../store/Store";
 
-import { addShoppingList } from "../../store/ShoppingList/ShoppingListThunks";
+import { addShoppingList } from "../../store/ShoppingList/ShoppingList";
 
 import type { ShoppingList } from "../../types/User";
 
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../store/Auth/Login";
+// import { login } from "../../store/Auth/Login";
+import { getLoggedInUser } from "../../store/Auth/Login";
 
 const Home = () => {
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("default");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [listName, setListName] = useState("");
+  const [numberOfItems, setNumberOfItems] = useState("");
+  const [note, setNote] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
-
-  const [sort, setSort] = useState("default");
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const navigate = useNavigate();
 
   // Get logged-in user
   const user = useSelector((state: RootState) => state.login.user);
+
+  // If there is a saved user ID
+  // but Redux does not have the user,
+  // get the user from json-server.
+
   useEffect(() => {
-    // Only try to log in if you have credentials and are not already logged in
-    if (user?.email && user?.password) {
-      dispatch(login({ email: user.email, password: user.password }));
+    const userId = localStorage.getItem("userId");
+
+    if (userId && !user) {
+      dispatch(getLoggedInUser());
     }
-  }, []);
-
-  const [listName, setListName] = useState("");
-
-  const [numberOfItems, setNumberOfItems] = useState("");
-
-  const [note, setNote] = useState("");
+  }, [dispatch, user]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
