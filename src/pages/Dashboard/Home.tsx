@@ -17,7 +17,7 @@ import {
   deleteShoppingList,
 } from "../../store/ShoppingList/ShoppingList";
 
-import type { ShoppingList } from "../../types/User";
+// import type { ShoppingList } from "../../types/User";
 
 import { useNavigate } from "react-router-dom";
 
@@ -62,7 +62,7 @@ const Home = () => {
     }
 
     // Create new list
-    const newList: string = {
+    const newList = {
       id: Date.now().toString(),
 
       name: listName,

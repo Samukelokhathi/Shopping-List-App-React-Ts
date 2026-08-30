@@ -12,7 +12,7 @@ export interface ShoppingList {
   name: string;
   numberOfItems: number;
   note?: string;
-  items: ListItem[];
+  items?: ListItem[];
 }
 
 export interface ListItem {
