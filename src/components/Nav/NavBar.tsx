@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../../ui/Button/Button";
+import Button from "../Button/Button";
 
 // import type { AppDispatch } from "../../store/Store";
 // import { logout } from "../../store/Login/LoginSlice";

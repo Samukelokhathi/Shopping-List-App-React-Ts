@@ -1,7 +1,7 @@
-import { Input } from "../../ui/Input/Input";
+import { Input } from "../../components/Input/Input";
 import styles from "./Register.module.css";
-import Button from "../../ui/Button/Button";
-import { Text } from "../../ui/Text/Text";
+import Button from "../../components/Button/Button";
+import { Text } from "../../components/Text/Text";
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

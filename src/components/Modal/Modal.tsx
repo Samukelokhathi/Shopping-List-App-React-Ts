@@ -1,7 +1,7 @@
 import React from "react";
 import modalStyle from "./Modal.module.css";
-import { Text } from "../../ui/Text/Text";
-import Button from "../../ui/Button/Button";
+import { Text } from "../Text/Text";
+import Button from "../Button/Button";
 
 type ModalProps = {
   isOpen: boolean;

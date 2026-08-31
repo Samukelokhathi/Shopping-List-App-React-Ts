@@ -1,8 +1,8 @@
 import homeStyle from "../../pages/Dashboard/Home.module.css";
 import Navbar from "../../components/Nav/NavBar";
-import Button from "../../ui/Button/Button";
-import { Input } from "../../ui/Input/Input";
-import { Text } from "../../ui/Text/Text";
+import Button from "../../components/Button/Button";
+import { Input } from "../../components/Input/Input";
+import { Text } from "../../components/Text/Text";
 
 import Modal from "../../components/Modal/Modal";
 import { useEffect, useState } from "react";

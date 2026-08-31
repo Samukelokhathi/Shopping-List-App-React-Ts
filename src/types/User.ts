@@ -13,6 +13,7 @@ export interface ShoppingList {
   numberOfItems: number;
   note?: string;
   items?: ListItem[];
+  createdAt?: string;
 }
 
 export interface ListItem {
@@ -20,4 +21,7 @@ export interface ListItem {
   name: string;
   quantity: number;
   completed: boolean;
+  category?: string;
+  note?: string;
+  createdAt?: string;
 }
