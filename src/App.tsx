@@ -1,5 +1,5 @@
-import Register from "./pages/Signup/Register";
 import Login from "./pages/Login/Login";
+import Register from "./pages/Signup/Register";
 import Home from "./pages/Dashboard/Home";
 import Profile from "./pages/Profile/Profile";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";

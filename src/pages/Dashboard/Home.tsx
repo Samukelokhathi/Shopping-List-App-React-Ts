@@ -194,9 +194,7 @@ const Home = () => {
             className={homeStyle.searchInput}
           />
 
-          <div className={homeStyle.filters}>
-            <Button className={homeStyle.searchButton}>Search</Button>
-
+          {/* <div className={homeStyle.filters}>
             <select
               value={sort}
               onChange={(event) => setSort(event.target.value)}
@@ -204,8 +202,8 @@ const Home = () => {
             >
               <option value="name">Name</option>
               <option value="items">Date</option>
-            </select>
-          </div>
+            </select> 
+          </div> */}
         </section>
 
         {/* Shopping List  */}
