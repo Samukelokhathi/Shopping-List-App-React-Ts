@@ -25,5 +25,5 @@ export interface ListItem {
   category?: string;
   note?: string;
   createdAt?: string;
-  imageUrl?: string;
+  imageUrl: string;
 }

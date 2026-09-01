@@ -20,6 +20,7 @@ export default function ShoppingListDetails() {
   const [quantity, setQuantity] = useState(1);
   const [category, setCategory] = useState("");
   const [note, setNote] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 1. Properly pull Redux variables into the component scope
@@ -58,6 +59,7 @@ export default function ShoppingListDetails() {
       name: itemName,
       quantity,
       category,
+      imageUrl,
       note,
       completed: false,
       createdAt: new Date().toISOString(),
@@ -168,6 +170,12 @@ export default function ShoppingListDetails() {
                 type="textarea"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
+              />
+              <label className={style.label}>Image</label>
+              <Input
+                type="url"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
               />
               <Button type="submit">Create List</Button>
             </form>

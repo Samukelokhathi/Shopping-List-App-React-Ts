@@ -2,18 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { User, ShoppingList, ListItem } from "../../types/User";
 
+//                            SHOPPING LISTS INTERFACES                          //
+
 // DATA NEEDED TO ADD A SHOPPING LIST
 
 interface AddListData {
   userId: string;
   list: ShoppingList;
-}
-
-// DATA NEEDED TO ADD LIST ITEM
-interface AddListItemData {
-  userId: string;
-  listId: string;
-  item: ListItem;
 }
 
 // DELETE LIST DATA
@@ -36,6 +31,29 @@ const initialState: ShoppingListState = {
   isLoading: false,
   error: null,
 };
+
+//                             LIST ITEMS INTERFACES                          //
+
+// 1.DATA NEEDED TO ADD LIST ITEM
+interface AddListItemData {
+  userId: string;
+  listId: string;
+  item: ListItem;
+}
+
+// 2. DELETE LIST ITEM DATA
+interface DeleteListItemData {
+  userId: string;
+  listId: string;
+  itemId: string;
+}
+
+// 3.EDIT LIST ITEM DATA
+interface UpdateListItemData {
+  userId: string;
+  listId: string;
+  item: ListItem;
+}
 
 // ADD SHOPPING LIST THUNK
 
@@ -172,6 +190,106 @@ export const deleteShoppingList = createAsyncThunk<
     return rejectWithValue("Failed to delete shopping list");
   }
 });
+
+// DELETE ITEM FROM LIST THUNK
+
+export const deleteListItem = createAsyncThunk<
+  User,
+  DeleteListItemData,
+  { rejectValue: string }
+>(
+  "shoppingList/deleteItem",
+  async ({ userId, listId, itemId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<User>(
+        `http://localhost:3000/users/${userId}`,
+      );
+
+      const user = response.data;
+
+      const updatedLists = user.lists.map((list) => {
+        if (String(list.id) === String(listId)) {
+          const updatedItems = list.items.filter(
+            (item) => String(item.id) !== String(itemId),
+          );
+
+          return {
+            ...list,
+            items: updatedItems,
+            numberOfItems: updatedItems.length,
+          };
+        }
+
+        return list;
+      });
+
+      const updatedUser: User = {
+        ...user,
+        lists: updatedLists,
+      };
+
+      const updateResponse = await axios.put<User>(
+        `http://localhost:3000/users/${userId}`,
+        updatedUser,
+      );
+
+      return updateResponse.data;
+    } catch (error) {
+      console.error(error);
+
+      return rejectWithValue("Failed to delete item");
+    }
+  },
+);
+
+// EDIT ITEM FROM LIST THUNK
+
+export const updateListItem = createAsyncThunk<
+  User,
+  UpdateListItemData,
+  { rejectValue: string }
+>(
+  "shoppingList/updateItem",
+  async ({ userId, listId, item }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<User>(
+        `http://localhost:3000/users/${userId}`,
+      );
+
+      const user = response.data;
+
+      const updatedLists = user.lists.map((list) => {
+        if (String(list.id) === String(listId)) {
+          return {
+            ...list,
+            items: list.items.map((existingItem) =>
+              String(existingItem.id) === String(item.id) ? item : existingItem,
+            ),
+          };
+        }
+
+        return list;
+      });
+
+      const updatedUser: User = {
+        ...user,
+        lists: updatedLists,
+      };
+
+      const updateResponse = await axios.put<User>(
+        `http://localhost:3000/users/${userId}`,
+        updatedUser,
+      );
+
+      return updateResponse.data;
+    } catch (error) {
+      console.error(error);
+
+      return rejectWithValue("Failed to update item");
+    }
+  },
+);
+
 // SHOPPING LIST SLICE
 
 const ShoppingListSlice = createSlice({
