@@ -36,16 +36,18 @@
       "password": "12345",
       "lists": [
         {
-          "id": "1788181079626",
-          "name": "sam",
+          "id": "1788246074669",
+          "name": "Cars",
           "numberOfItems": 0,
-          "note": ""
+          "note": "",
+          "items": []
         },
         {
-          "id": "1788244948509",
-          "name": "list",
+          "id": "1788250149278",
+          "name": "fdasf",
           "numberOfItems": 0,
-          "note": ""
+          "note": "",
+          "items": []
         }
       ],
       "id": "g7GdscMh8SM"

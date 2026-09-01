@@ -73,27 +73,20 @@ export const addShoppingList = createAsyncThunk<
 // GET SHOPPING LISTS THUNK
 
 export const getShoppingLists = createAsyncThunk<
-  User,
+  ShoppingList[], // Change return type to the array directly
   string,
   { rejectValue: string }
->(
-  "shoppingList/getAll",
-
-  async (userId, { rejectWithValue }) => {
-    try {
-      // Get the specific logged-in user
-      const response = await axios.get<User>(
-        `http://localhost:3000/users/${userId}`,
-      );
-
-      return response.data;
-    } catch (error) {
-      console.error(error);
-
-      return rejectWithValue("Failed to fetch shopping lists");
-    }
-  },
-);
+>("shoppingList/getAll", async (userId, { rejectWithValue }) => {
+  try {
+    const response = await axios.get<User>(
+      `http://localhost:3000/users/${userId}`,
+    );
+    return response.data.lists; // Return only the nested array
+  } catch (error) {
+    console.error(error);
+    return rejectWithValue("Failed to fetch shopping lists");
+  }
+});
 
 // DELETE SHOPPING LIST THUNK
 
@@ -146,8 +139,9 @@ const ShoppingListSlice = createSlice({
         state.error = null;
       })
       .addCase(getShoppingLists.fulfilled, (state, action) => {
+        console.log("PAYLOAD RECEIVED FROM BACKEND:", action.payload);
         state.isLoading = false;
-        state.lists = action.payload.lists;
+        state.lists = action.payload; // action.payload is now directly the array!
         state.error = null;
       })
       .addCase(getShoppingLists.rejected, (state, action) => {

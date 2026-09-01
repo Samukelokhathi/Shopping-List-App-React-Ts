@@ -69,6 +69,7 @@ const Home = () => {
       numberOfItems: Number(numberOfItems),
 
       note: note,
+      items: [],
     };
 
     try {
