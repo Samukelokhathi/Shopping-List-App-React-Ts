@@ -82,7 +82,6 @@ export const getShoppingLists = createAsyncThunk<
   async (userId, { rejectWithValue }) => {
     try {
       // Get the specific logged-in user
-      console.log(userId, "this guy");
       const response = await axios.get<User>(
         `http://localhost:3000/users/${userId}`,
       );
