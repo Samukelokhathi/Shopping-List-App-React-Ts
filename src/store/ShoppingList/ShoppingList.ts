@@ -1,12 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import type { User, ShoppingList } from "../../types/User";
+import type { User, ShoppingList, ListItem } from "../../types/User";
 
 // DATA NEEDED TO ADD A SHOPPING LIST
 
 interface AddListData {
   userId: string;
   list: ShoppingList;
+}
+
+// DATA NEEDED TO ADD LIST ITEM
+interface AddListItemData {
+  userId: string;
+  listId: string;
+  item: ListItem;
 }
 
 // DELETE LIST DATA
@@ -66,6 +73,53 @@ export const addShoppingList = createAsyncThunk<
       console.error(error);
 
       return rejectWithValue("Failed to create shopping list");
+    }
+  },
+);
+
+// ADD LIST ITEM THUNK
+
+export const addListItem = createAsyncThunk<
+  User,
+  AddListItemData,
+  { rejectValue: string }
+>(
+  "shoppingList/addItem",
+  async ({ userId, listId, item }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<User>(
+        `http://localhost:3000/users/${userId}`,
+      );
+
+      const user = response.data;
+
+      const updatedLists = user.lists.map((list) => {
+        if (String(list.id) === String(listId)) {
+          return {
+            ...list,
+            items: [...list.items, item],
+            numberOfItems: list.items.length + 1,
+          };
+        }
+
+        return list;
+      });
+
+      const updatedUser: User = {
+        ...user,
+        lists: updatedLists,
+      };
+
+      const updateResponse = await axios.put<User>(
+        `http://localhost:3000/users/${userId}`,
+        updatedUser,
+      );
+
+      return updateResponse.data;
+    } catch (error) {
+      console.error(error);
+
+      return rejectWithValue("Failed to add item");
     }
   },
 );

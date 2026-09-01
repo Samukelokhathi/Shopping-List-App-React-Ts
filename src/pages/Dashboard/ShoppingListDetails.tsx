@@ -7,15 +7,16 @@ import Button from "../../components/Button/Button";
 import style from "./ShoppingListDetails.module.css";
 import Modal from "../../components/Modal/Modal";
 import { Input } from "../../components/Input/Input";
+import ItemCard from "../../components/ShoppingListCard/ItemCard";
 
 export default function ShoppingListDetails() {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
+
   const [itemName, setItemName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [category, setCategory] = useState("");
   const [note, setNote] = useState("");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 1. Properly pull Redux variables into the component scope
@@ -31,7 +32,7 @@ export default function ShoppingListDetails() {
       ? routerState.id
       : routerState;
 
-  // 3. Fetch data using the CURRENT USER ID (Not the list ID!)
+  // 3. Fetch data using the CURRENT USER ID
   useEffect(() => {
     if (currentUserId) {
       dispatch(getShoppingLists(currentUserId));
@@ -41,7 +42,46 @@ export default function ShoppingListDetails() {
   // 4. Find the matching list using string-safe conversion
   const list = lists.find((item) => String(item.id) === String(targetId));
 
-  // 6. Handle Async Status Screens
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const newItemData = {
+      name: itemName,
+      quantity,
+      category,
+      note,
+      completed: false,
+    };
+
+    console.log("Submitting new item to list:", targetId, newItemData);
+
+    try {
+      setIsModalOpen(false);
+      setItemName("");
+      setQuantity(1);
+      setCategory("");
+      setNote("");
+    } catch (err) {
+      console.error("Failed to save item:", err);
+    }
+  };
+
+  // Handle Edit Item
+  const handleEditItem = (itemId: string) => {
+    console.log("Edit item triggered for ID:", itemId);
+  };
+
+  // Handle Delete Item
+  const handleDeleteItem = (itemId: string) => {
+    console.log("Delete item triggered for ID:", itemId);
+  };
+
+  // HANDLE TOGGLE COMPLETE ITEM
+
+  const handleToggleCompleteItem = (itemId: string) => {
+    console.log("Toggle complete triggered for ID:", itemId);
+  };
+
   if (isLoading) {
     return <div className={style.container}>Loading your shopping list...</div>;
   }
@@ -77,7 +117,7 @@ export default function ShoppingListDetails() {
             onClose={() => setIsModalOpen(false)}
             title="Creating Shopping list"
           >
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={handleSubmit}>
               <label className={style.label}>Item Name</label>
               <Input
                 type="text"
@@ -119,7 +159,24 @@ export default function ShoppingListDetails() {
         </div>
       </div>
 
-      <div className={style.displayItems}></div>
+      {/* Render the structural layout for list items safely */}
+      <div className={style.displayItems}>
+        {list.items && list.items.length > 0 ? (
+          list.items.map((item) => (
+            <ItemCard
+              key={item.id}
+              item={item}
+              onEdit={handleEditItem}
+              onDelete={handleDeleteItem}
+              onToggleComplete={handleToggleCompleteItem}
+            />
+          ))
+        ) : (
+          <p className={style.noItems}>
+            No items in this list yet. Click "Add Item" to start!
+          </p>
+        )}
+      </div>
     </div>
   );
 }
