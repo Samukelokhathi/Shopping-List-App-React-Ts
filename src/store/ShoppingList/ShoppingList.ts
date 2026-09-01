@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { User, ShoppingList, ListItem } from "../../types/User";
 
+
 //                            SHOPPING LISTS INTERFACES                          //
 
 // DATA NEEDED TO ADD A SHOPPING LIST
@@ -55,6 +56,9 @@ interface UpdateListItemData {
   item: ListItem;
 }
 
+//                            SHOPPING LISTS THUNKS                          //
+
+
 // ADD SHOPPING LIST THUNK
 
 export const addShoppingList = createAsyncThunk<
@@ -95,52 +99,7 @@ export const addShoppingList = createAsyncThunk<
   },
 );
 
-// ADD LIST ITEM THUNK
 
-export const addListItem = createAsyncThunk<
-  User,
-  AddListItemData,
-  { rejectValue: string }
->(
-  "shoppingList/addItem",
-  async ({ userId, listId, item }, { rejectWithValue }) => {
-    try {
-      const response = await axios.get<User>(
-        `http://localhost:3000/users/${userId}`,
-      );
-
-      const user = response.data;
-
-      const updatedLists = user.lists.map((list) => {
-        if (String(list.id) === String(listId)) {
-          return {
-            ...list,
-            items: [...list.items, item],
-            numberOfItems: list.items.length + 1,
-          };
-        }
-
-        return list;
-      });
-
-      const updatedUser: User = {
-        ...user,
-        lists: updatedLists,
-      };
-
-      const updateResponse = await axios.put<User>(
-        `http://localhost:3000/users/${userId}`,
-        updatedUser,
-      );
-
-      return updateResponse.data;
-    } catch (error) {
-      console.error(error);
-
-      return rejectWithValue("Failed to add item");
-    }
-  },
-);
 
 // GET SHOPPING LISTS THUNK
 
@@ -190,6 +149,57 @@ export const deleteShoppingList = createAsyncThunk<
     return rejectWithValue("Failed to delete shopping list");
   }
 });
+
+
+//                             LIST ITEMS THUNK                        //
+
+// ADD LIST ITEM THUNK
+
+export const addListItem = createAsyncThunk<
+  User,
+  AddListItemData,
+  { rejectValue: string }
+>(
+  "shoppingList/addItem",
+  async ({ userId, listId, item }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<User>(
+        `http://localhost:3000/users/${userId}`,
+      );
+
+      const user = response.data;
+
+      const updatedLists = user.lists.map((list) => {
+        if (String(list.id) === String(listId)) {
+          return {
+            ...list,
+            items: [...list.items, item],
+            numberOfItems: list.items.length + 1,
+          };
+        }
+
+        return list;
+      });
+
+      const updatedUser: User = {
+        ...user,
+        lists: updatedLists,
+      };
+
+      const updateResponse = await axios.put<User>(
+        `http://localhost:3000/users/${userId}`,
+        updatedUser,
+      );
+
+      return updateResponse.data;
+    } catch (error) {
+      console.error(error);
+
+      return rejectWithValue("Failed to add item");
+    }
+  },
+);
+
 
 // DELETE ITEM FROM LIST THUNK
 
@@ -290,6 +300,9 @@ export const updateListItem = createAsyncThunk<
   },
 );
 
+
+//                            SHOPPING LISTS SLICE                          //
+
 // SHOPPING LIST SLICE
 
 const ShoppingListSlice = createSlice({
@@ -355,6 +368,9 @@ const ShoppingListSlice = createSlice({
         state.error = action.payload || "Failed to delete shopping list";
       });
 
+    //                             LIST ITEMS REDUCERS                       //
+
+
     // ADD LIST ITEM REDUCERS
 
     builder
@@ -370,6 +386,42 @@ const ShoppingListSlice = createSlice({
       .addCase(addListItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed to add item";
+      });
+
+
+    // DELETE LIST ITEM REDUCERS
+
+    builder
+      .addCase(deleteListItem.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteListItem.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.lists = action.payload.lists;
+        state.error = null;
+      })
+      .addCase(deleteListItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to delete item";
+      });
+
+
+    // EDIT LIST ITEM REDUCERS
+
+    builder
+      .addCase(updateListItem.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateListItem.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.lists = action.payload.lists;
+        state.error = null;
+      })
+      .addCase(updateListItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to update item";
       });
   },
 });
