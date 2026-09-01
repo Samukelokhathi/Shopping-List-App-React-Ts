@@ -1,8 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  padding-left: 8rem;
   margin-top: 3rem;
   gap: 4rem;
 }
@@ -64,4 +63,12 @@ select option {
     color: #111;
     font-size: 15px;
     padding: 0.5rem;
+}
+
+
+.displayItems{
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
 }
