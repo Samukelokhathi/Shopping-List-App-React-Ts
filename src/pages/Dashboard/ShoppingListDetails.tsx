@@ -12,7 +12,7 @@ import Button from "../../components/Button/Button";
 import style from "./ShoppingListDetails.module.css";
 import Modal from "../../components/Modal/Modal";
 import { Input } from "../../components/Input/Input";
-import ItemCard from "../../components/ShoppingListCard/ItemCard";
+import ItemCard from "../../components/ShoppingListCard/ItemCard.tsx";
 import type { ListItem } from "../../types/User";
 
 export default function ShoppingListDetails() {

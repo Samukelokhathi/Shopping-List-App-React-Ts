@@ -1,6 +1,6 @@
 import Button from "../Button/Button";
 import { Text } from "../Text/Text";
-import styles from "./ShoppingListCard.module.css";
+import styles from "./ItemCard.module.css";
 import type { ListItem } from "../../types/User";
 
 interface ItemCardProps {

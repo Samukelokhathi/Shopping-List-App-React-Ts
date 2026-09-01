@@ -13,6 +13,7 @@ type InputProps = {
   type?: React.HTMLInputTypeAttribute;
   className?: string;
   required?: boolean;
+  min?: number;
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -23,6 +24,7 @@ export const Input: React.FC<InputProps> = ({
   label,
   error,
   name,
+  min,
   type = "text",
   // className = "",
   required,
@@ -39,6 +41,7 @@ export const Input: React.FC<InputProps> = ({
         onChange={onChange}
         className={inputStyle.input}
         required={required}
+        min={min}
       />
       {error && <span className={inputStyle["input-error"]}>{error}</span>}
     </div>

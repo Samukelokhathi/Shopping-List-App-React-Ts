@@ -31,6 +31,7 @@ const ShoppingItems = () => {
             name: itemName,
             quantity,
             completed: false,
+            imageUrl: "", // Add imageUrl here if needed
         };
 
         try {
