@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { getShoppingLists } from "../../store/ShoppingList/ShoppingList";
+import {
+  getShoppingLists,
+  addListItem,
+} from "../../store/ShoppingList/ShoppingList";
 import type { AppDispatch, RootState } from "../../store/Store";
 import Button from "../../components/Button/Button";
 import style from "./ShoppingListDetails.module.css";
@@ -45,24 +48,37 @@ export default function ShoppingListDetails() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newItemData = {
+    if (!currentUserId || !targetId) {
+      console.error("Missing user ID or shopping list ID");
+      return;
+    }
+
+    const newItem = {
+      id: Date.now().toString(),
       name: itemName,
       quantity,
       category,
       note,
       completed: false,
+      createdAt: new Date().toISOString(),
     };
 
-    console.log("Submitting new item to list:", targetId, newItemData);
-
     try {
-      setIsModalOpen(false);
+      await dispatch(
+        addListItem({
+          userId: currentUserId,
+          listId: String(targetId),
+          item: newItem,
+        }),
+      ).unwrap();
+
       setItemName("");
       setQuantity(1);
       setCategory("");
       setNote("");
-    } catch (err) {
-      console.error("Failed to save item:", err);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Failed to save item:", error);
     }
   };
 
