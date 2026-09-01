@@ -236,6 +236,23 @@ const ShoppingListSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload || "Failed to delete shopping list";
       });
+
+    // ADD LIST ITEM REDUCERS
+
+    builder
+      .addCase(addListItem.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(addListItem.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.lists = action.payload.lists;
+        state.error = null;
+      })
+      .addCase(addListItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to add item";
+      });
   },
 });
 
