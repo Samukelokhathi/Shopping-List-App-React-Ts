@@ -1,9 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import type { ShoppingList } from "../../types/User";
 import Button from "../Button/Button";
 import { Text } from "../Text/Text";
 import styles from "./ShoppingListCard.module.css";
 
 interface ShoppingListCardProps {
+  id: string;
   list: ShoppingList;
   onEdit: (list: ShoppingList) => void;
   onDelete: (id: string) => void;
@@ -11,13 +13,17 @@ interface ShoppingListCardProps {
 }
 
 const ShoppingListCard = ({
+  id,
   list,
   onEdit,
   onDelete,
-  onClick,
 }: ShoppingListCardProps) => {
+  const navigate = useNavigate();
   return (
-    <div className={styles.card} onClick={() => onClick(list.id)}>
+    <div
+      className={styles.card}
+      onClick={() => navigate("/shoppingListItems", { state: { id } })}
+    >
       <div className={styles.content}>
         <Text variant="h2">{list.name}</Text>
 
@@ -39,3 +45,5 @@ const ShoppingListCard = ({
 };
 
 export default ShoppingListCard;
+
+//navigate and params

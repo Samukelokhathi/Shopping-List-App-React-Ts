@@ -26,7 +26,7 @@ import { getLoggedInUser } from "../../store/Auth/Login";
 
 const Home = () => {
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("default");
+  const [sort] = useState("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listName, setListName] = useState("");
   const [numberOfItems, setNumberOfItems] = useState("");
@@ -213,6 +213,7 @@ const Home = () => {
             sortedLists.map((list) => (
               <ShoppingListCard
                 key={list.id}
+                id={`${list.id}`}
                 list={list}
                 onEdit={(list) => {
                   console.log("Edit:", list);
@@ -222,7 +223,7 @@ const Home = () => {
                   console.log("Delete:", id);
                 }}
                 onClick={(id) => {
-                  navigate(`/shopping-list/${id}`);
+                  navigate("/shoppingListItems", { state: id });
                 }}
               />
             ))

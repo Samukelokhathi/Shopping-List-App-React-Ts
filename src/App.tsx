@@ -4,6 +4,7 @@ import Home from "./pages/Dashboard/Home";
 import Profile from "./pages/Profile/Profile";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { Route, Routes } from "react-router-dom";
+import ShoppingListDetails from "./pages/Dashboard/ShoppingListDetails";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/home" element={<Home />} />
+          <Route path="/shoppingListItems" element={<ShoppingListDetails />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
