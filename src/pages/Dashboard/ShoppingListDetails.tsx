@@ -118,6 +118,8 @@ export default function ShoppingListDetails() {
           </Modal>
         </div>
       </div>
+
+      <div className={style.displayItems}></div>
     </div>
   );
 }

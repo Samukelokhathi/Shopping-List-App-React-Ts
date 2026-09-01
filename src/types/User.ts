@@ -14,6 +14,7 @@ export interface ShoppingList {
   note?: string;
   items: ListItem[];
   createdAt?: string;
+  imageUrl?: string;
 }
 
 export interface ListItem {
@@ -24,4 +25,5 @@ export interface ListItem {
   category?: string;
   note?: string;
   createdAt?: string;
+  imageUrl?: string;
 }
