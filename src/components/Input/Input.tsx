@@ -26,7 +26,7 @@ export const Input: React.FC<InputProps> = ({
   name,
   min,
   type = "text",
-  // className = "",
+  className = "",
   required,
 }) => {
   return (
@@ -39,8 +39,7 @@ export const Input: React.FC<InputProps> = ({
         type={type}
         value={value}
         onChange={onChange}
-        className={inputStyle.input}
-        required={required}
+        className={`${inputStyle.input} ${className}`.trim()} required={required}
         min={min}
       />
       {error && <span className={inputStyle["input-error"]}>{error}</span>}

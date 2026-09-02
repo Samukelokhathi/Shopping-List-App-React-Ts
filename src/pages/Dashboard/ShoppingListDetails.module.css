@@ -3,7 +3,11 @@
   flex-direction: column;
   padding-left: 8rem;
   margin-top: 3rem;
-  gap: 4rem;
+  gap: 2rem;
+}
+
+.backButton {
+  width: 10%;
 }
 
 .listDetails {
@@ -22,63 +26,177 @@
   color: black;
 }
 
+/* Search and category controls */
+.filters {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
-select {
-  width: 100%;
+.searchInput {
+  width: 75%;
+}
+
+.categorySelect {
+  width: 25%;
   height: 43px;
   box-sizing: border-box;
-  padding: 0 2rem 0 0.75rem;
-  /* Generous right padding ensures text doesn't overlap the custom arrow */
-
+  padding: 0 2.5rem 0 0.75rem;
   border-radius: 11px;
   border: 1px solid #d8d8d8;
   background-color: #fff;
   color: #111;
   font-size: 15px;
+  cursor: pointer;
 
-  /* Clears native browser dropdown styling across Chrome, Safari, and Firefox */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  /* Custom dropdown arrow asset styled to blend into the input footprint */
+  /* Dropdown arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 16px;
-
-  cursor: pointer;
 }
 
-select:hover {
+.categorySelect:hover {
   border-color: #bdbdbd;
 }
 
-select:focus {
+.categorySelect:focus {
   border-color: #2589e9;
   box-shadow: 0 0 0 2px rgba(37, 137, 233, 0.15);
   outline: none;
-  /* Removes native blue focus ring outlines */
 }
 
-/* Styles the individual dropdown list options safely across browsers */
-select option {
+.categorySelect option {
   background-color: #fff;
   color: #111;
   font-size: 15px;
   padding: 0.5rem;
 }
 
-.filters {
-  width: 80%;
-}
-
-.searchInput {
-  width: 80%;
-}
-
-
+/* Items */
 .displayItems {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+}
 
+/* Buttons / page controls */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+/* Labels */
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #111;
+}
+
+/* Empty state */
+.noItems {
+  width: 80%;
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+}
+
+/* Completed item styling */
+.completed {
+  opacity: 0.6;
+}
+
+.completed .content {
+  text-decoration: line-through;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 2rem;
+    gap: 1.5rem;
+  }
+
+  .backButton {
+    width: 100%;
+  }
+
+  .listDetails {
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+    box-sizing: border-box;
+  }
+
+  .listName {
+    font-size: 20px;
+  }
+
+  .filters {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .searchInput,
+  .categorySelect {
+    width: 100%;
+  }
+
+  .displayItems {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .controls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .noItems {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Tablet */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .listDetails,
+  .filters {
+    width: 90%;
+  }
+
+  .searchInput {
+    width: 70%;
+  }
+
+  .categorySelect {
+    width: 30%;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+  .container {
+    padding-left: 8rem;
+  }
 }

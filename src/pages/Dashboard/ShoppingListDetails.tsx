@@ -28,6 +28,7 @@ export default function ShoppingListDetails() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<ListItem | null>(null);
     const [search, setSearch] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("all");
 
     // 1. Properly pull Redux variables into the component scope
     const { lists, isLoading, error } = useSelector(
@@ -51,6 +52,27 @@ export default function ShoppingListDetails() {
 
     // 4. Find the matching list using string-safe conversion
     const list = lists.find((item) => String(item.id) === String(targetId));
+    //  Reset form fields after submission
+    const resetForm = () => {
+        setItemName("");
+        setQuantity(1);
+        setCategory("");
+        setNote("");
+        setImageUrl("");
+        setEditingItem(null);
+    };
+
+    const handleAddItem = () => {
+        resetForm();
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        resetForm();
+        setIsModalOpen(false);
+    };
+
+    // Handle form submission for adding or editing an item
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -189,14 +211,27 @@ export default function ShoppingListDetails() {
     }
 
     // Search lists
-    const filteredItems = list.items.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-        ||
-        item.note?.toLowerCase().includes(search.toLowerCase()),
-    );
+    const filteredItems = list?.items.filter(
+        (item) =>
+            (item.name.toLowerCase().includes(search.toLowerCase()) ||
+                item.note?.toLowerCase().includes(search.toLowerCase())) &&
+            (selectedCategory === "all" ||
+                item.category?.toLowerCase() === selectedCategory.toLowerCase()),
+    ) || [];
+    // Filter by category
+    const categories = [
+        ...new Set(
+            list?.items
+                .map((item) => item.category)
+                .filter((category): category is string => Boolean(category)),
+        ),
+    ];
 
     return (
         <div className={style.container}>
+            <Button className={style.backButton} variant="primary" onClick={() => window.history.back()}>
+                &larr; Back to Lists
+            </Button>
             <div className={style.listDetails}>
                 <h1 className={style.listName}>{list.name}</h1>
                 <p className={style.listNote}>{list.note}</p>
@@ -204,62 +239,57 @@ export default function ShoppingListDetails() {
                 <div>
                     <Button variant="primary">Delete List</Button>
                     <Button variant="primary">Share List</Button>
-                    <Button variant="primary" onClick={() => setIsModalOpen(true)}>
+                    <Button variant="primary" onClick={handleAddItem}>
                         Add Item
                     </Button>
-
-                    <Modal
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        title={editingItem ? "Edit Item" : "Add New Item"}
-                    >
-                        <form onSubmit={handleSubmit}>
-                            <label className={style.label}>Item Name</label>
-                            <Input
-                                type="text"
-                                value={itemName}
-                                onChange={(e) => setItemName(e.target.value)}
-                                required
-                            />
-
-                            <label className={style.label}>Quantity</label>
-                            <Input
-                                type="number"
-                                value={quantity}
-                                onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                                required
-                            />
-
-                            <label className={style.label}>Category</label>
-                            <select
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                                className={style.select}
-                            >
-                                <option value="">Select a category</option>
-                                <option value="fruits">Fruits</option>
-                                <option value="vegetables">Vegetables</option>
-                                <option value="dairy">Dairy</option>
-                                <option value="meat">Meat</option>
-                            </select>
-
-                            <label className={style.label}>Optional Note</label>
-                            <Input
-                                type="textarea"
-                                value={note}
-                                onChange={(e) => setNote(e.target.value)}
-                            />
-                            <label className={style.label}>Image</label>
-                            <Input
-                                type="url"
-                                value={imageUrl}
-                                onChange={(e) => setImageUrl(e.target.value)}
-                            />
-                            <Button type="submit">{editingItem ? "Update Item" : "Add Item"}</Button>
-                        </form>
-                    </Modal>
-
                 </div>
+
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    title={editingItem ? "Edit Item" : "Add New Item"}
+                >
+                    <form onSubmit={handleSubmit}>
+                        <label className={style.label}>Item Name</label>
+                        <Input
+                            type="text"
+                            value={itemName}
+                            onChange={(e) => setItemName(e.target.value)}
+                            required
+                        />
+
+                        <label className={style.label}>Quantity</label>
+                        <Input
+                            type="number"
+                            value={quantity}
+                            onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                            required
+                        />
+
+                        <label className={style.label}>Category</label>
+                        <Input
+                            type="text"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        />
+
+                        <label className={style.label}>Optional Note</label>
+                        <Input
+                            type="textarea"
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                        />
+                        <label className={style.label}>Image</label>
+                        <Input
+                            type="url"
+                            value={imageUrl}
+                            onChange={(e) => setImageUrl(e.target.value)}
+                        />
+                        <Button type="submit">{editingItem ? "Update Item" : "Add Item"}</Button>
+                    </form>
+                </Modal>
+
+
             </div>
             <section className={style.filters}>
                 <Input
@@ -268,6 +298,19 @@ export default function ShoppingListDetails() {
                     onChange={(event) => setSearch(event.target.value)}
                     className={style.searchInput}
                 />
+                <select
+                    value={selectedCategory}
+                    onChange={(event) => setSelectedCategory(event.target.value)}
+                    className={style.categorySelect}
+                >
+                    <option value="all">All Categories</option>
+
+                    {categories.map((category) => (
+                        <option key={category} value={category}>
+                            {category}
+                        </option>
+                    ))}
+                </select>
             </section>
 
             {/* Render the structural layout for list items safely */}
