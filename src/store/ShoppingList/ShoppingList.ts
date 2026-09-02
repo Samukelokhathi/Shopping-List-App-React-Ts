@@ -55,6 +55,11 @@ interface UpdateListItemData {
   listId: string;
   item: ListItem;
 }
+interface ToggleListItemData {
+  userId: string;
+  listId: string;
+  itemId: string;
+}
 
 //                            SHOPPING LISTS THUNKS                          //
 
@@ -301,6 +306,60 @@ export const updateListItem = createAsyncThunk<
 );
 
 
+// TOGGLE ITEM FROM LIST THUNK
+
+export const toggleListItem = createAsyncThunk<
+  User,
+  ToggleListItemData,
+  { rejectValue: string }
+>(
+  "shoppingList/toggleItem",
+  async ({ userId, listId, itemId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<User>(
+        `http://localhost:3000/users/${userId}`,
+      );
+
+      const user = response.data;
+
+      const updatedLists = user.lists.map((list) => {
+        if (String(list.id) === String(listId)) {
+          return {
+            ...list,
+            items: list.items.map((item) =>
+              String(item.id) === String(itemId)
+                ? {
+                  ...item,
+                  completed: !item.completed,
+                }
+                : item,
+            ),
+          };
+        }
+
+        return list;
+      });
+
+      const updatedUser: User = {
+        ...user,
+        lists: updatedLists,
+      };
+
+      const updateResponse = await axios.put<User>(
+        `http://localhost:3000/users/${userId}`,
+        updatedUser,
+      );
+
+      return updateResponse.data;
+    } catch (error) {
+      console.error(error);
+
+      return rejectWithValue("Failed to update item");
+    }
+  },
+);
+
+
 //                            SHOPPING LISTS SLICE                          //
 
 // SHOPPING LIST SLICE
@@ -420,6 +479,22 @@ const ShoppingListSlice = createSlice({
         state.error = null;
       })
       .addCase(updateListItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to update item";
+      });
+
+    // TOGGLE ITEM FROM LIST REDUCERS
+    builder
+      .addCase(toggleListItem.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(toggleListItem.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.lists = action.payload.lists;
+        state.error = null;
+      })
+      .addCase(toggleListItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed to update item";
       });
