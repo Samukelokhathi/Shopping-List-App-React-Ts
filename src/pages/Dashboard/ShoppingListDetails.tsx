@@ -188,6 +188,13 @@ export default function ShoppingListDetails() {
         );
     }
 
+    // Search lists
+    const filteredItems = list.items.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+        ||
+        item.note?.toLowerCase().includes(search.toLowerCase()),
+    );
+
     return (
         <div className={style.container}>
             <div className={style.listDetails}>
@@ -265,8 +272,8 @@ export default function ShoppingListDetails() {
 
             {/* Render the structural layout for list items safely */}
             <div className={style.displayItems}>
-                {list.items && list.items.length > 0 ? (
-                    list.items.map((item) => (
+                {filteredItems && filteredItems.length > 0 ? (
+                    filteredItems.map((item) => (
                         <ItemCard
                             key={item.id}
                             item={item}

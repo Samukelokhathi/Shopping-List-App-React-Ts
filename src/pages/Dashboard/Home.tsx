@@ -117,6 +117,7 @@ const Home = () => {
     return 0;
   });
 
+  // Handle delete list
   const handleDelete = async (listId: string) => {
     if (!user) {
       console.log("No user is logged in");
