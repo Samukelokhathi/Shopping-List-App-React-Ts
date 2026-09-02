@@ -5,7 +5,8 @@ import {
     getShoppingLists,
     addListItem,
     deleteListItem,
-    updateListItem
+    updateListItem,
+    toggleListItem,
 } from "../../store/ShoppingList/ShoppingList";
 import type { AppDispatch, RootState } from "../../store/Store";
 import Button from "../../components/Button/Button";
@@ -150,8 +151,23 @@ export default function ShoppingListDetails() {
 
     // HANDLE TOGGLE COMPLETE ITEM
 
-    const handleToggleCompleteItem = (itemId: string) => {
-        console.log("Toggle complete triggered for ID:", itemId);
+    const handleToggleCompleteItem = async (itemId: string) => {
+        if (!currentUserId || !targetId) {
+            console.error("Missing user ID or shopping list ID");
+            return;
+        }
+
+        try {
+            await dispatch(
+                toggleListItem({
+                    userId: currentUserId,
+                    listId: String(targetId),
+                    itemId,
+                }),
+            ).unwrap();
+        } catch (error) {
+            console.error("Failed to update item:", error);
+        }
     };
 
     if (isLoading) {

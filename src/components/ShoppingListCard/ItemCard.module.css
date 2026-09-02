@@ -18,3 +18,11 @@
 .card:hover {
     transform: translateY(-2px);
 }
+
+.completed {
+    opacity: 0.6;
+}
+
+.completed .content {
+    text-decoration: line-through;
+}
