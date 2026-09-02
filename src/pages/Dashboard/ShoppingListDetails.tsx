@@ -27,6 +27,7 @@ export default function ShoppingListDetails() {
     const [imageUrl, setImageUrl] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<ListItem | null>(null);
+    const [search, setSearch] = useState("");
 
     // 1. Properly pull Redux variables into the component scope
     const { lists, isLoading, error } = useSelector(
@@ -250,8 +251,17 @@ export default function ShoppingListDetails() {
                             <Button type="submit">{editingItem ? "Update Item" : "Add Item"}</Button>
                         </form>
                     </Modal>
+
                 </div>
             </div>
+            <section className={style.filters}>
+                <Input
+                    type="text"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                    className={style.searchInput}
+                />
+            </section>
 
             {/* Render the structural layout for list items safely */}
             <div className={style.displayItems}>

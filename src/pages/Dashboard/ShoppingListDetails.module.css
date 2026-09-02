@@ -67,6 +67,14 @@ select option {
   padding: 0.5rem;
 }
 
+.filters {
+  width: 80%;
+}
+
+.searchInput {
+  width: 80%;
+}
+
 
 .displayItems {
   display: flex;
