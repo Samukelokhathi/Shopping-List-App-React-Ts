@@ -3,6 +3,7 @@ import Navbar from "../../components/Nav/NavBar";
 import Button from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
 import { Text } from "../../components/Text/Text";
+import type { ShoppingList } from "../../types/User";
 
 import Modal from "../../components/Modal/Modal";
 import { useEffect, useState } from "react";
@@ -14,7 +15,7 @@ import type { RootState, AppDispatch } from "../../store/Store";
 import {
   addShoppingList,
   deleteShoppingList,
-  editShoppingList,
+  updateShoppingList,
 } from "../../store/ShoppingList/ShoppingList";
 
 // import type { ShoppingList } from "../../types/User";
@@ -137,6 +138,25 @@ const Home = () => {
     }
   };
 
+  const handleUpdate = async (listId: string, updatedList: ShoppingList) => {
+    if (!user) {
+      console.log("No user is logged in");
+      return;
+    }
+
+    try {
+      await dispatch(
+        updateShoppingList({
+          userId: user.id,
+          listId: listId,
+          updatedList: updatedList,
+        }),
+      ).unwrap();
+    } catch (error) {
+      console.error("Failed to update list:", error);
+    }
+  };
+
   return (
     <div className={homeStyle.container}>
       <Navbar />
@@ -208,6 +228,7 @@ const Home = () => {
                 id={`${list.id}`}
                 list={list}
                 onEdit={(list) => {
+                  handleUpdate(list.id, list);
                   console.log("Edit:", list);
                 }}
                 onDelete={(id) => {

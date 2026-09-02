@@ -19,6 +19,13 @@ interface DeleteListData {
   listId: string;
 }
 
+// EDIT LIST DATA
+interface EditListData {
+  userId: string;
+  listId: string;
+  updatedList: ShoppingList;
+}
+
 // SHOPPING LIST STATE
 
 interface ShoppingListState {
@@ -104,8 +111,6 @@ export const addShoppingList = createAsyncThunk<
   },
 );
 
-
-
 // GET SHOPPING LISTS THUNK
 
 export const getShoppingLists = createAsyncThunk<
@@ -121,6 +126,43 @@ export const getShoppingLists = createAsyncThunk<
   } catch (error) {
     console.error(error);
     return rejectWithValue("Failed to fetch shopping lists");
+  }
+});
+
+// UPDATE SHOPPING LIST THUNK
+
+export const updateShoppingList = createAsyncThunk<
+  User,
+  EditListData,
+  { rejectValue: string }
+>("shoppingList/update", async ({ userId, listId, updatedList }, { rejectWithValue }) => {
+  try {
+    const response = await axios.get<User>(
+      `http://localhost:3000/users/${userId}`,
+    );
+    const user = response.data;
+
+    const updatedLists = user.lists.map((list) => {
+      if (String(list.id) === String(listId)) {
+        return updatedList;
+      }
+      return list;
+    });
+
+    const updatedUser: User = {
+      ...user,
+      lists: updatedLists,
+    };
+
+    const updateResponse = await axios.put<User>(
+      `http://localhost:3000/users/${userId}`,
+      updatedUser,
+    );
+
+    return updateResponse.data;
+  } catch (error) {
+    console.error(error);
+    return rejectWithValue("Failed to update shopping list");
   }
 });
 
@@ -425,6 +467,22 @@ const ShoppingListSlice = createSlice({
       .addCase(deleteShoppingList.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed to delete shopping list";
+      });
+
+    // UPDATE SHOPPING LIST
+    builder
+      .addCase(updateShoppingList.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateShoppingList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.lists = action.payload.lists;
+        state.error = null;
+      })
+      .addCase(updateShoppingList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to update shopping list";
       });
 
     //                             LIST ITEMS REDUCERS                       //

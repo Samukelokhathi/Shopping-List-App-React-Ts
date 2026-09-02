@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import type { ShoppingList } from "../../types/User";
 import Button from "../Button/Button";
 import { Text } from "../Text/Text";
@@ -17,33 +16,42 @@ const ShoppingListCard = ({
   list,
   onEdit,
   onDelete,
+  onClick, // 🔴 CHANGED
 }: ShoppingListCardProps) => {
-  const navigate = useNavigate();
   return (
     <div
       className={styles.card}
-      onClick={() => navigate("/shoppingListItems", { state: { id } })}
+      onClick={() => onClick(id)} // 🔴 CHANGED
     >
       <div className={styles.content}>
         <Text variant="h2">{list.name}</Text>
 
-        <Text variant="p">{list.numberOfItems} items</Text>
+        <Text variant="p">
+          {list.numberOfItems} items
+        </Text>
 
-        {list.note && <Text variant="p">{list.note}</Text>}
+        {list.note && (
+          <Text variant="p">
+            {list.note}
+          </Text>
+        )}
       </div>
 
       <div
         className={styles.actions}
         onClick={(event) => event.stopPropagation()}
       >
-        <Button onClick={() => onEdit(list)}>Edit</Button>
+        {/* 🔴 CHANGED: This now opens the edit modal in Home */}
+        <Button onClick={() => onEdit(list)}>
+          Edit
+        </Button>
 
-        <Button onClick={() => onDelete(list.id)}>Delete</Button>
+        <Button onClick={() => onDelete(String(list.id))}>
+          Delete
+        </Button>
       </div>
     </div>
   );
 };
 
 export default ShoppingListCard;
-
-//navigate and params
