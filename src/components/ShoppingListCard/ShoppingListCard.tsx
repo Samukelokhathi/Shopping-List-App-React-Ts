@@ -9,6 +9,7 @@ interface ShoppingListCardProps {
   onEdit: (list: ShoppingList) => void;
   onDelete: (id: string) => void;
   onClick: (id: string) => void;
+  // share?: (id:string) => void
 }
 
 const ShoppingListCard = ({
@@ -16,12 +17,12 @@ const ShoppingListCard = ({
   list,
   onEdit,
   onDelete,
-  onClick, // 🔴 CHANGED
+  onClick, 
 }: ShoppingListCardProps) => {
   return (
     <div
       className={styles.card}
-      onClick={() => onClick(id)} // 🔴 CHANGED
+      onClick={() => onClick(id)} 
     >
       <div className={styles.content}>
         <Text variant="h2">{list.name}</Text>
@@ -41,10 +42,14 @@ const ShoppingListCard = ({
         className={styles.actions}
         onClick={(event) => event.stopPropagation()}
       >
-        {/* 🔴 CHANGED: This now opens the edit modal in Home */}
+      
         <Button onClick={() => onEdit(list)}>
           Edit
         </Button>
+
+        {/* <Button onClick={() => share(String(list.id))}>
+          Share
+        </Button> */}
 
         <Button onClick={() => onDelete(String(list.id))}>
           Delete

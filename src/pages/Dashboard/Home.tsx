@@ -138,6 +138,26 @@ const Home = () => {
     }
   };
 
+//   const handleShareList = async (e: React.MouseEvent<HTMLButtonElement>) => {
+//     e.stopPropagation()
+//     const shareUrl = `${window.location.origin}/shared-list/${list.id}`
+//     try {
+//     if (navigator.share) {
+//     await navigator.share({
+//     title: list.name,
+//     text: `Check out my shopping list: ${list.name}`,
+//     url: shareUrl,
+//     })
+//     } else {
+//     await navigator.clipboard.writeText(shareUrl)
+//     alert('Link copied to clipboard!')
+//     }
+//     } catch (error) {
+//     console.log('Share cancelled', error)
+//     }
+// }
+
+  // Handle Update
   const handleUpdate = async (listId: string, updatedList: ShoppingList) => {
     if (!user) {
       console.log("No user is logged in");
@@ -231,6 +251,11 @@ const Home = () => {
                   handleUpdate(list.id, list);
                   console.log("Edit:", list);
                 }}
+
+                // share={(id) => {
+                //   handleShareList(id)
+                // }}
+
                 onDelete={(id) => {
                   handleDelete(id);
                   console.log("Delete:", id);
