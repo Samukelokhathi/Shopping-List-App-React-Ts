@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 // import type { AppDispatch } from "../../store/Store";
 // import { logout } from "../../store/Login/LoginSlice";
 
-import styles from "./Navbar.module.css";
+import styles from "./NavBar.module.css";
 
 function Navbar() {
   const navigate = useNavigate();
