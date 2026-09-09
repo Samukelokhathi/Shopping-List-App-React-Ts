@@ -1,104 +1,82 @@
-// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 // import axios from "axios";
-// import type { User, ShoppingList, ListItem } from "../../types/User";
+// import type { User } from "../../types/User";
+// import { addShoppingList } from "../ShoppingList/ShoppingList";
+// import { deleteShoppingList } from "../ShoppingList/ShoppingList";
 
-// // ======================================================
-// // ADD SHOPPING LIST DATA
-// // ======================================================
-
-// interface AddListData {
-//   userId: string;
-//   list: ShoppingList;
+// // LOGIN DATA
+// export interface LoginData {
+//   email: string;
+//   password: string;
 // }
-
-// // ======================================================
-// // DELETE SHOPPING LIST DATA
-// // ======================================================
-
-// interface DeleteListData {
-//   userId: string;
-//   listId: string;
-// }
-
-// // ⭐ CHANGED: DATA NEEDED TO ADD AN ITEM
-// interface AddListItemData {
-//   userId: string;
-//   listId: string;
-//   item: ListItem;
-// }
-
-// // ======================================================
-// // SHOPPING LIST STATE
-// // ======================================================
-
-// interface ShoppingListState {
-//   lists: ShoppingList[];
+// // AUTH STATE
+// interface LogInState {
+//   user: User | null;
+//   isAuthenticated: boolean;
 //   isLoading: boolean;
 //   error: string | null;
 // }
 
-// const initialState: ShoppingListState = {
-//   lists: [],
+// const initialState: LogInState = {
+//   user: null,
+//   isAuthenticated: false,
 //   isLoading: false,
 //   error: null,
 // };
 
-// // ======================================================
-// // ADD SHOPPING LIST THUNK
-// // ======================================================
+// // LOGIN THUNK
 
-// export const addShoppingList = createAsyncThunk<
-//   User,
-//   AddListData,
-//   { rejectValue: string }
-// >(
-//   "shoppingList/add",
+// export const login = createAsyncThunk<User, LoginData, { rejectValue: string }>(
+//   "auth/login",
 
-//   async ({ userId, list }, { rejectWithValue }) => {
+//   async (loginData, { rejectWithValue }) => {
 //     try {
-//       // Get the logged-in user
-//       const response = await axios.get<User>(
-//         `http://localhost:3000/users/${userId}`,
+//       const response = await axios.get<User[]>("http://localhost:3000/users");
+
+//       const loggedUser = response.data.find(
+//         (user) =>
+//           user.email === loginData.email &&
+//           user.password === loginData.password,
 //       );
 
-//       const user = response.data;
+//       if (!loggedUser) {
+//         return rejectWithValue("Invalid email or password");
+//       }
 
-//       // Add the new list to that user's lists
-//       const updatedUser: User = {
-//         ...user,
+//       // Save logged-in user's ID
+//       // so we can find this user again
+//       // after refreshing the page.
 
-//         lists: [...user.lists, list],
-//       };
+//       localStorage.setItem("userId", loggedUser.id);
 
-//       // Save the updated user
-//       const updateResponse = await axios.put<User>(
-//         `http://localhost:3000/users/${userId}`,
-//         updatedUser,
-//       );
-
-//       return updateResponse.data;
+//       return loggedUser;
 //     } catch (error) {
 //       console.error(error);
 
-//       return rejectWithValue("Failed to create shopping list");
+//       return rejectWithValue("Unable to connect to server");
 //     }
 //   },
 // );
 
-// // ======================================================
-// // GET SHOPPING LISTS THUNK
-// // ======================================================
+// // GET LOGGED-IN USER
+// // This runs when the page is refreshed.
 
-// export const getShoppingLists = createAsyncThunk<
+// export const getLoggedInUser = createAsyncThunk<
 //   User,
-//   string,
+//   void,
 //   { rejectValue: string }
 // >(
-//   "shoppingList/getAll",
+//   "auth/getLoggedInUser",
 
-//   async (userId, { rejectWithValue }) => {
+//   async (_, { rejectWithValue }) => {
 //     try {
-//       // Get the specific logged-in user
+//       const userId = localStorage.getItem("userId");
+
+//       if (!userId) {
+//         return rejectWithValue("No logged-in user");
+//       }
+
 //       const response = await axios.get<User>(
 //         `http://localhost:3000/users/${userId}`,
 //       );
@@ -107,157 +85,93 @@
 //     } catch (error) {
 //       console.error(error);
 
-//       return rejectWithValue("Failed to fetch shopping lists");
+//       localStorage.removeItem("userId");
+
+//       return rejectWithValue("Unable to restore user");
 //     }
 //   },
 // );
 
-// // ======================================================
-// // DELETE SHOPPING LIST THUNK
-// // ======================================================
+// // AUTH SLICE
 
-// export const deleteShoppingList = createAsyncThunk<
-//   User,
-//   DeleteListData,
-//   { rejectValue: string }
-// >(
-//   "shoppingList/delete",
-
-//   async ({ userId, listId }, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.get<User>(
-//         `http://localhost:3000/users/${userId}`,
-//       );
-
-//       const user = response.data;
-
-//       const updatedLists = user.lists.filter(
-//         (list) => list.id !== listId,
-//       );
-
-//       const updatedUser: User = {
-//         ...user,
-//         lists: updatedLists,
-//       };
-
-//       const updateResponse = await axios.put<User>(
-//         `http://localhost:3000/users/${userId}`,
-//         updatedUser,
-//       );
-
-//       return updateResponse.data;
-//     } catch (error) {
-//       console.error(error);
-
-//       return rejectWithValue("Failed to delete shopping list");
-//     }
-//   },
-// );
-
-// // ======================================================
-// // ⭐ CHANGED: ADD ITEM TO SHOPPING LIST
-// // ======================================================
-
-// export const addListItem = createAsyncThunk<
-//   User,
-//   AddListItemData,
-//   { rejectValue: string }
-// >(
-//   "shoppingList/addItem",
-
-//   async (
-//     { userId, listId, item },
-//     { rejectWithValue },
-//   ) => {
-//     try {
-//       // Get the logged-in user
-//       const response = await axios.get<User>(
-//         `http://localhost:3000/users/${userId}`,
-//       );
-
-//       const user = response.data;
-
-//       // Find the specific shopping list
-//       const updatedLists = user.lists.map((list) => {
-//         if (list.id === listId) {
-//           return {
-//             ...list,
-
-//             // ⭐ CHANGED: Add item to this list
-//             items: [...(list.items || []), item],
-//           };
-//         }
-
-//         return list;
-//       });
-
-//       // Create updated user
-//       const updatedUser: User = {
-//         ...user,
-//         lists: updatedLists,
-//       };
-
-//       // Save to json-server
-//       const updateResponse = await axios.put<User>(
-//         `http://localhost:3000/users/${userId}`,
-//         updatedUser,
-//       );
-
-//       return updateResponse.data;
-//     } catch (error) {
-//       console.error(error);
-
-//       return rejectWithValue("Failed to add item");
-//     }
-//   },
-// );
-
-// // ======================================================
-// // SHOPPING LIST SLICE
-// // ======================================================
-
-// const ShoppingListSlice = createSlice({
-//   name: "shoppingList",
+// const Login = createSlice({
+//   name: "login",
 
 //   initialState,
 
 //   reducers: {
-//     clearLists(state) {
-//       state.lists = [];
+//     logout(state) {
+//       state.user = null;
+//       state.isAuthenticated = false;
+//       state.error = null;
+
+//       // Remove saved user
+//       localStorage.removeItem("userId");
 //     },
 //   },
 
 //   extraReducers: (builder) => {
-//     // ==================================================
-//     // GET SHOPPING LISTS
-//     // ==================================================
-
 //     builder
-//       .addCase(getShoppingLists.pending, (state) => {
+
+//       // LOGIN
+//       .addCase(login.pending, (state) => {
 //         state.isLoading = true;
 //         state.error = null;
 //       })
 
-//       .addCase(getShoppingLists.fulfilled, (state, action) => {
+//       .addCase(login.fulfilled, (state, action) => {
 //         state.isLoading = false;
 
-//         state.lists = action.payload.lists;
+//         state.user = action.payload;
+//         console.log(state.user);
+
+//         state.isAuthenticated = true;
+
+//         state.error = null;
+
+//         localStorage.setItem("user", JSON.stringify(action.payload));
+//       })
+
+//       .addCase(login.rejected, (state, action) => {
+//         state.isLoading = false;
+
+//         state.user = null;
+
+//         state.isAuthenticated = false;
+
+//         state.error = action.payload || "Login failed";
+//       });
+
+//     //  RESTORE USER
+
+//     builder
+
+//       .addCase(getLoggedInUser.pending, (state) => {
+//         state.isLoading = true;
+//       })
+
+//       .addCase(getLoggedInUser.fulfilled, (state, action) => {
+//         state.isLoading = false;
+
+//         state.user = action.payload;
+
+//         state.isAuthenticated = true;
 
 //         state.error = null;
 //       })
 
-//       .addCase(getShoppingLists.rejected, (state, action) => {
+//       .addCase(getLoggedInUser.rejected, (state) => {
 //         state.isLoading = false;
 
-//         state.error =
-//           action.payload || "Failed to fetch shopping lists";
+//         state.user = null;
+
+//         state.isAuthenticated = false;
 //       });
 
-//     // ==================================================
 //     // ADD SHOPPING LIST
-//     // ==================================================
 
 //     builder
+
 //       .addCase(addShoppingList.pending, (state) => {
 //         state.isLoading = true;
 //         state.error = null;
@@ -266,8 +180,8 @@
 //       .addCase(addShoppingList.fulfilled, (state, action) => {
 //         state.isLoading = false;
 
-//         // API returns the updated user
-//         state.lists = action.payload.lists;
+//         // Updated user contains new list
+//         state.user = action.payload;
 
 //         state.error = null;
 //       })
@@ -275,74 +189,18 @@
 //       .addCase(addShoppingList.rejected, (state, action) => {
 //         state.isLoading = false;
 
-//         state.error =
-//           action.payload || "Failed to create shopping list";
+//         state.error = action.payload || "Failed to create shopping list";
 //       });
 
-//     // ==================================================
 //     // DELETE SHOPPING LIST
-//     // ==================================================
-
-//     builder
-//       .addCase(deleteShoppingList.pending, (state) => {
-//         state.isLoading = true;
-//         state.error = null;
-//       })
-
-//       .addCase(deleteShoppingList.fulfilled, (state, action) => {
-//         state.isLoading = false;
-
-//         // ⭐ CHANGED:
-//         // Redux immediately receives the updated lists
-//         state.lists = action.payload.lists;
-
-//         state.error = null;
-//       })
-
-//       .addCase(deleteShoppingList.rejected, (state, action) => {
-//         state.isLoading = false;
-
-//         state.error =
-//           action.payload || "Failed to delete shopping list";
-//       });
-
-//     // ==================================================
-//     // ⭐ CHANGED: ADD ITEM
-//     // ==================================================
-
-//     builder
-//       .addCase(addListItem.pending, (state) => {
-//         state.isLoading = true;
-//         state.error = null;
-//       })
-
-//       .addCase(addListItem.fulfilled, (state, action) => {
-//         state.isLoading = false;
-
-//         // ⭐ CHANGED:
-//         // Update Redux immediately after item is saved
-//         state.lists = action.payload.lists;
-
-//         state.error = null;
-//       })
-
-//       .addCase(addListItem.rejected, (state, action) => {
-//         state.isLoading = false;
-
-//         state.error =
-//           action.payload || "Failed to add item";
-//       });
+//     builder.addCase(deleteShoppingList.fulfilled, (state, action) => {
+//       if (state.user) {
+//         state.user = action.payload;
+//       }
+//     });
 //   },
 // });
 
-// // ======================================================
-// // ACTIONS
-// // ======================================================
+// export const { logout } = Login.actions;
 
-// export const { clearLists } = ShoppingListSlice.actions;
-
-// // ======================================================
-// // REDUCER
-// // ======================================================
-
-// export default ShoppingListSlice.reducer;
+// export default Login.reducer;

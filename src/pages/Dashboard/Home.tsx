@@ -3,6 +3,7 @@ import Navbar from "../../components/Nav/NavBar";
 import Button from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
 import { Text } from "../../components/Text/Text";
+import type { ShoppingList } from "../../types/User";
 
 import Modal from "../../components/Modal/Modal";
 import { useEffect, useState } from "react";
@@ -14,23 +15,22 @@ import type { RootState, AppDispatch } from "../../store/Store";
 import {
   addShoppingList,
   deleteShoppingList,
+  updateShoppingList,
+  getShoppingLists,
 } from "../../store/ShoppingList/ShoppingList";
-
-// import type { ShoppingList } from "../../types/User";
 
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-// import { login } from "../../store/Auth/Login";
-import { getLoggedInUser } from "../../store/Auth/Login";
 
 const Home = () => {
   const [search, setSearch] = useState("");
   const [sort] = useState("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listName, setListName] = useState("");
-  const [numberOfItems, setNumberOfItems] = useState("");
   const [note, setNote] = useState("");
+
+  const [editingList, setEditingList] = useState<ShoppingList | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -38,17 +38,11 @@ const Home = () => {
   // Get logged-in user
   const user = useSelector((state: RootState) => state.login.user);
 
-  // If there is a saved user ID
-  // but Redux does not have the user,
-  // get the user from json-server.
-
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-
-    if (userId && !user) {
-      dispatch(getLoggedInUser());
+    if (user?.id) {
+      dispatch(getShoppingLists(user.id));
     }
-  }, [dispatch, user]);
+  }, [dispatch, user?.id]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,39 +54,56 @@ const Home = () => {
       return;
     }
 
-    // Create new list
-    const newList = {
-      id: Date.now().toString(),
+    if (editingList) {
+      // UPDATE existing list
+      const updatedList: ShoppingList = {
+        ...editingList,
+        name: listName,
+        note,
+      };
 
-      name: listName,
+      try {
+        await dispatch(
+          updateShoppingList({
+            userId: user.id,
+            listId: editingList.id,
+            updatedList,
+          }),
+        ).unwrap();
 
-      numberOfItems: Number(numberOfItems),
+        setEditingList(null);
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Failed to update list:", error);
+      }
+    } else {
+      // Create new list
+      const newList = {
+        id: Date.now().toString(),
+        name: listName,
+        numberOfItems: 0,
+        note: note,
+        items: [],
+      };
 
-      note: note,
-      items: [],
-    };
+      try {
+        // Save list under logged-in user
+        await dispatch(
+          addShoppingList({
+            userId: user.id,
+            list: newList,
+          }),
+        ).unwrap();
 
-    try {
-      // Save list under logged-in user
-      await dispatch(
-        addShoppingList({
-          userId: user.id,
+        // Clear form
+        setListName("");
+        setNote("");
 
-          list: newList,
-        }),
-      ).unwrap();
-
-      // Clear form
-      setListName("");
-
-      setNumberOfItems("");
-
-      setNote("");
-
-      // Close modal
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Failed to create list:", error);
+        // Close modal
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Failed to create list:", error);
+      }
     }
   };
 
@@ -117,6 +128,7 @@ const Home = () => {
     return 0;
   });
 
+  // Handle delete list
   const handleDelete = async (listId: string) => {
     if (!user) {
       console.log("No user is logged in");
@@ -132,6 +144,30 @@ const Home = () => {
       ).unwrap();
     } catch (error) {
       console.error("Failed to delete list:", error);
+    }
+  };
+
+  // Handle Share List
+  const handleShareList = async (
+    list: ShoppingList,
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.stopPropagation();
+    const shareUrl = `${window.location.origin}/shared-list/${list.id}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: list.name,
+          text: `Check out my shopping list: ${list.name}`,
+          url: shareUrl,
+        });
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        alert("Link copied to clipboard!");
+      }
+    } catch (error) {
+      console.log("Share cancelled", error);
     }
   };
 
@@ -159,7 +195,7 @@ const Home = () => {
             + New list
           </Button>
 
-          {/* Modal  */}
+          {/* Modal */}
           <Modal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
@@ -173,6 +209,7 @@ const Home = () => {
                 onChange={(event) => setListName(event.target.value)}
                 required
               />
+
               <label className={homeStyle.listItemName}>Optional Note</label>
 
               <Input
@@ -180,7 +217,11 @@ const Home = () => {
                 value={note}
                 onChange={(event) => setNote(event.target.value)}
               />
-              <Button type="submit" children={"Create List"} />
+
+              <Button
+                type="submit"
+                children={editingList ? "Update List" : "Create List"}
+              />
             </form>
           </Modal>
         </section>
@@ -196,7 +237,7 @@ const Home = () => {
           />
         </section>
 
-        {/* Shopping List  */}
+        {/* Shopping List */}
 
         <section className={homeStyle.lists}>
           {sortedLists.length > 0 ? (
@@ -206,8 +247,12 @@ const Home = () => {
                 id={`${list.id}`}
                 list={list}
                 onEdit={(list) => {
-                  console.log("Edit:", list);
+                  setEditingList(list);
+                  setListName(list.name);
+                  setNote(list.note || "");
+                  setIsModalOpen(true);
                 }}
+                onShare={(e) => handleShareList(list, e)}
                 onDelete={(id) => {
                   handleDelete(id);
                   console.log("Delete:", id);
