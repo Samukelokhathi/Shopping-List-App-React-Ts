@@ -1,93 +1,164 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import type { ShoppingList } from "../../types/User";
-import styles from "./SharedListPage.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../../store/Store";
+import { getShoppingLists } from "../../store/ShoppingList/ShoppingList";
+import { Text } from "../../components/Text/Text";
+import style from "./SharedList.module.css";
 
-export const SharedListPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const [list, setList] = useState<ShoppingList | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+export const SharedList = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch<AppDispatch>();
+
+  // FIX: Your slice uses "lists", not "shoppingLists".
+  const { lists, isLoading, error } = useSelector(
+    (state: RootState) => state.shoppingList,
+  );
+
+  // FIX: Your slice stores items inside each shopping list.
+  // There is no separate shoppingItem state.
+  const user = useSelector((state: RootState) => state.login.user);
 
   useEffect(() => {
-    const fetchList = async () => {
-      try {
-        const res = await axios.get<ShoppingList>(
-          `http://localhost:3000/lists/${id}`,
-        );
-        setList(res.data);
-      } catch {
-        setNotFound(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (id) fetchList();
-  }, [id]);
+    if (user?.id) {
+      dispatch(getShoppingLists(user.id));
+    }
+  }, [dispatch, user?.id]);
 
-  if (loading) return <div className={styles.center}>Loading...</div>;
-  if (notFound || !list)
+  // FIX: Find the list directly from the slice.
+  const list = lists.find(
+    (shoppingList) => String(shoppingList.id) === String(id),
+  );
+
+  // FIX: Items belong to the list.
+  // Your slice uses "items", not a separate shoppingItem array.
+  const listItems = list?.items ?? [];
+
+  if (isLoading) {
     return (
-      <div className={styles.center}>
-        <h2>List not found</h2>
-        <p>This shopping list could not be found.</p>
-      </div>
+      <section className={style.page}>
+        <div className={style.message}>
+          <Text variant="h2">Loading shopping list...</Text>
+        </div>
+      </section>
     );
+  }
+
+  if (error) {
+    return (
+      <section className={style.page}>
+        <div className={style.message}>
+          <Text variant="h2">Something went wrong</Text>
+
+          <Text variant="p">{error}</Text>
+        </div>
+      </section>
+    );
+  }
+
+  if (!list) {
+    return (
+      <section className={style.page}>
+        <div className={style.message}>
+          <Text variant="h2">List not found</Text>
+
+          <Text variant="p">This shopping list could not be found.</Text>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <div className={styles.page}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>{list.name}</h1>
-          <p className={styles.subtitle}>Shared shopping list</p>
+    <section className={style.page}>
+      <div className={style.container}>
+        <div className={style.header}>
+          <div>
+            <Text variant="h1" className={style.title}>
+              {list.name}
+            </Text>
+
+            <Text variant="p" className={style.subtitle}>
+              Shared shopping list
+            </Text>
+          </div>
         </div>
-        <div className={styles.info}>
-          <div className={styles.badge}>
+
+        <div className={style.info}>
+          <div className={style.category}>
+            <span>Category</span>
+
+            {/* FIX: Your ShoppingList interface uses "category" only if
+                it exists in your current type. If it does not exist,
+                remove this field or add it to the interface. */}
+          </div>
+
+          <div className={style.count}>
             <span>Items</span>
-            <strong>{list.items.length}</strong>
-          </div>
-          <div className={styles.badge}>
-            <span>Done</span>
-            <strong>
-              {list.items.filter((i) => i.completed).length}/{list.items.length}
-            </strong>
+
+            {/* FIX: Read the actual items array. */}
+            <strong>{listItems.length}</strong>
           </div>
         </div>
+
+        {/* FIX: Your ShoppingList interface uses "note", not "notes". */}
         {list.note && (
-          <p className={styles.notes}>
-            <strong>Notes:</strong> {list.note}
-          </p>
-        )}
-        <h2 className={styles.itemsTitle}>Shopping Items</h2>
-        {list.items.length === 0 ? (
-          <p className={styles.empty}>This list has no items yet.</p>
-        ) : (
-          <div className={styles.items}>
-            {list.items.map((item, index) => (
-              <div
-                key={item.id}
-                className={`${styles.item} ${item.completed ? styles.checked : ""}`}
-              >
-                <div className={styles.number}>{index + 1}</div>
-                {item.imageUrl && (
-                  <img
-                    src={item.imageUrl}
-                    alt={item.name}
-                    className={styles.itemImage}
-                  />
-                )}
-                <div className={styles.itemInfo}>
-                  <p className={styles.itemName}>{item.name}</p>
-                  <p className={styles.itemCategory}>{item.category}</p>
-                  {item.note && <p className={styles.itemNotes}>{item.note}</p>}
-                </div>
-                <div className={styles.quantity}>x{item.quantity}</div>
-              </div>
-            ))}
+          <div className={style.notes}>
+            <Text variant="p">
+              <strong>Notes:</strong> {list.note}
+            </Text>
           </div>
         )}
+
+        <div className={style.itemsSection}>
+          <Text variant="h2" className={style.itemsTitle}>
+            Shopping Items
+          </Text>
+
+          {listItems.length === 0 ? (
+            <div className={style.empty}>
+              <Text variant="p">This list has no items yet.</Text>
+            </div>
+          ) : (
+            <div className={style.items}>
+              {listItems.map((item, index) => (
+                <div key={item.id} className={style.item}>
+                  <div className={style.number}>{index + 1}</div>
+
+                  {/* FIX: Your ListItem interface uses "imageUrl",
+                      not "image". */}
+                  {item.imageUrl && (
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className={style.itemImage}
+                    />
+                  )}
+
+                  <div className={style.itemInfo}>
+                    <Text variant="h3" className={style.itemName}>
+                      {item.name}
+                    </Text>
+
+                    <Text variant="p" className={style.itemCategory}>
+                      {item.category}
+                    </Text>
+
+                    {/* FIX: Your ListItem interface uses "note",
+                        not "notes". */}
+                    {item.note && (
+                      <Text variant="p" className={style.itemNotes}>
+                        {item.note}
+                      </Text>
+                    )}
+                  </div>
+
+                  <div className={style.quantity}>x{item.quantity}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };

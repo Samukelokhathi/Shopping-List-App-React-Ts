@@ -9,7 +9,7 @@ interface ShoppingListCardProps {
   onEdit: (list: ShoppingList) => void;
   onDelete: (id: string) => void;
   onClick: (id: string) => void;
-  onShare?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onShare?: (id: string) => void;
 }
 
 const ShoppingListCard = ({
