@@ -2,6 +2,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Signup/Register";
 import Home from "./pages/Dashboard/Home";
 import Profile from "./pages/Profile/Profile";
+import LandingPage from "./pages/Landing/LandingPage";
 import { SharedListPage } from "./pages/SharedListPage/SharedList";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { Route, Routes } from "react-router-dom";
@@ -33,7 +34,6 @@ export default function App() {
     }
   }, [dispatch]);
 
-
   if (!authCheckedState) {
     return <div>Loading...</div>;
   }
@@ -41,7 +41,8 @@ export default function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/sharedList" element={<SharedListPage />} />
 
