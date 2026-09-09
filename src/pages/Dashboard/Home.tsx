@@ -32,7 +32,6 @@ const Home = () => {
   const [sort] = useState("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listName, setListName] = useState("");
-  const [numberOfItems, setNumberOfItems] = useState("");
   const [note, setNote] = useState("");
 
   const [editingList, setEditingList] = useState<ShoppingList | null>(null); // ✅ NEW
@@ -161,42 +160,26 @@ const Home = () => {
     }
   };
 
-  //   const handleShareList = async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.stopPropagation()
-  //     const shareUrl = `${window.location.origin}/shared-list/${list.id}`
-  //     try {
-  //     if (navigator.share) {
-  //     await navigator.share({
-  //     title: list.name,
-  //     text: `Check out my shopping list: ${list.name}`,
-  //     url: shareUrl,
-  //     })
-  //     } else {
-  //     await navigator.clipboard.writeText(shareUrl)
-  //     alert('Link copied to clipboard!')
-  //     }
-  //     } catch (error) {
-  //     console.log('Share cancelled', error)
-  //     }
-  // }
-
-  // Handle Update
-  const handleUpdate = async (listId: string, updatedList: ShoppingList) => {
-    if (!user) {
-      console.log("No user is logged in");
-      return;
-    }
-
+  // Handle Share List ✅ NEW
+  const handleShareList = async (
+    list: ShoppingList,
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.stopPropagation();
+    const shareUrl = `${window.location.origin}/shared-list/${list.id}`;
     try {
-      await dispatch(
-        updateShoppingList({
-          userId: user.id,
-          listId: listId,
-          updatedList: updatedList,
-        }),
-      ).unwrap();
+      if (navigator.share) {
+        await navigator.share({
+          title: list.name,
+          text: `Check out my shopping list: ${list.name}`,
+          url: shareUrl,
+        });
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        alert("Link copied to clipboard!");
+      }
     } catch (error) {
-      console.error("Failed to update list:", error);
+      console.log("Share cancelled", error);
     }
   };
 
@@ -274,16 +257,13 @@ const Home = () => {
                 id={`${list.id}`}
                 list={list}
                 onEdit={(list) => {
-                  // ✅ open modal with pre-filled values
+                  //  open modal with pre-filled values
                   setEditingList(list);
                   setListName(list.name);
                   setNote(list.note || "");
                   setIsModalOpen(true);
                 }}
-                // share={(id) => {
-                //   handleShareList(id)
-                // }}
-
+                onShare={(e) => handleShareList(list, e)}
                 onDelete={(id) => {
                   handleDelete(id);
                   console.log("Delete:", id);

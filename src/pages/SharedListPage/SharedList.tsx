@@ -1,6 +1,6 @@
 import type { ShoppingList } from "../../types/User";
-import Button from "../Button/Button";
-import { Text } from "../Text/Text";
+import Button from "../../components/Button/Button";
+import { Text } from "../../components/Text/Text";
 import styles from "./ShoppingListCard.module.css";
 
 interface ShoppingListCardProps {
@@ -33,7 +33,7 @@ const ShoppingListCard = ({
         onClick={(event) => event.stopPropagation()}
       >
         <Button onClick={() => onEdit(list)}>Edit</Button>
-        <Button onClick={() => onShare}>Share</Button>
+        {onShare && <Button onClick={() => onShare}>Share</Button>}
         <Button onClick={() => onDelete(String(list.id))}>Delete</Button>
       </div>
     </div>
