@@ -19,13 +19,9 @@ import {
   getShoppingLists,
 } from "../../store/ShoppingList/ShoppingList";
 
-// import type { ShoppingList } from "../../types/User";
-
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-// import { login } from "../../store/Auth/Login";
-import { getLoggedInUser } from "../../store/Auth/Login";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -34,7 +30,7 @@ const Home = () => {
   const [listName, setListName] = useState("");
   const [note, setNote] = useState("");
 
-  const [editingList, setEditingList] = useState<ShoppingList | null>(null); // ✅ NEW
+  const [editingList, setEditingList] = useState<ShoppingList | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -42,20 +38,11 @@ const Home = () => {
   // Get logged-in user
   const user = useSelector((state: RootState) => state.login.user);
 
-  // If there is a saved user ID
-  // but Redux does not have the user,
-  // get the user from json-server.
-
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-
-    if (userId && !user) {
-      dispatch(getLoggedInUser());
+    if (user?.id) {
+      dispatch(getShoppingLists(user.id));
     }
-    if (userId) {
-      dispatch(getShoppingLists(userId));
-    }
-  }, [dispatch, user]);
+  }, [dispatch, user?.id]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -66,8 +53,9 @@ const Home = () => {
 
       return;
     }
+
     if (editingList) {
-      //  UPDATE existing list
+      // UPDATE existing list
       const updatedList: ShoppingList = {
         ...editingList,
         name: listName,
@@ -83,7 +71,6 @@ const Home = () => {
           }),
         ).unwrap();
 
-        //  update UI immediately
         setEditingList(null);
         setIsModalOpen(false);
       } catch (error) {
@@ -94,7 +81,7 @@ const Home = () => {
       const newList = {
         id: Date.now().toString(),
         name: listName,
-        numberOfItems: 0, // ✅ always starts at 0
+        numberOfItems: 0,
         note: note,
         items: [],
       };
@@ -160,13 +147,14 @@ const Home = () => {
     }
   };
 
-  // Handle Share List ✅ NEW
+  // Handle Share List
   const handleShareList = async (
     list: ShoppingList,
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     e.stopPropagation();
     const shareUrl = `${window.location.origin}/shared-list/${list.id}`;
+
     try {
       if (navigator.share) {
         await navigator.share({
@@ -207,7 +195,7 @@ const Home = () => {
             + New list
           </Button>
 
-          {/* Modal  */}
+          {/* Modal */}
           <Modal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
@@ -221,6 +209,7 @@ const Home = () => {
                 onChange={(event) => setListName(event.target.value)}
                 required
               />
+
               <label className={homeStyle.listItemName}>Optional Note</label>
 
               <Input
@@ -228,6 +217,7 @@ const Home = () => {
                 value={note}
                 onChange={(event) => setNote(event.target.value)}
               />
+
               <Button
                 type="submit"
                 children={editingList ? "Update List" : "Create List"}
@@ -247,7 +237,7 @@ const Home = () => {
           />
         </section>
 
-        {/* Shopping List  */}
+        {/* Shopping List */}
 
         <section className={homeStyle.lists}>
           {sortedLists.length > 0 ? (
@@ -257,7 +247,6 @@ const Home = () => {
                 id={`${list.id}`}
                 list={list}
                 onEdit={(list) => {
-                  //  open modal with pre-filled values
                   setEditingList(list);
                   setListName(list.name);
                   setNote(list.note || "");

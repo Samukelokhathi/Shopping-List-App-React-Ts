@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import {
-    getShoppingLists,
-    addListItem,
-    deleteListItem,
-    updateListItem,
-    toggleListItem,
+  getShoppingLists,
+  addListItem,
+  deleteListItem,
+  updateListItem,
+  toggleListItem,
 } from "../../store/ShoppingList/ShoppingList";
 import type { AppDispatch, RootState } from "../../store/Store";
 import Button from "../../components/Button/Button";
@@ -17,320 +17,322 @@ import ItemCard from "../../components/ShoppingListCard/ItemCard.tsx";
 import type { ListItem } from "../../types/User";
 
 export default function ShoppingListDetails() {
-    const location = useLocation();
-    const dispatch = useDispatch<AppDispatch>();
+  const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
 
-    const [itemName, setItemName] = useState("");
-    const [quantity, setQuantity] = useState(1);
-    const [category, setCategory] = useState("");
-    const [note, setNote] = useState("");
-    const [imageUrl, setImageUrl] = useState("");
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<ListItem | null>(null);
-    const [search, setSearch] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("all");
+  const [itemName, setItemName] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [category, setCategory] = useState("");
+  const [note, setNote] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<ListItem | null>(null);
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-    // 1. Properly pull Redux variables into the component scope
-    const { lists, isLoading, error } = useSelector(
-        (state: RootState) => state.shoppingList,
-    );
-    const currentUserId = useSelector((state: RootState) => state.login.user?.id);
+  // 1. Properly pull Redux variables into the component scope
+  const { lists, isLoading, error } = useSelector(
+    (state: RootState) => state.shoppingList,
+  );
+  const currentUserId = useSelector((state: RootState) => state.login.user?.id);
 
-    // 2. Extract the target list ID from React Router navigation state
-    const routerState = location.state;
-    const targetId =
-        typeof routerState === "object" && routerState !== null
-            ? routerState.id
-            : routerState;
+  // 2. Extract the target list ID from React Router navigation state
+  const routerState = location.state;
+  const targetId =
+    typeof routerState === "object" && routerState !== null
+      ? routerState.id
+      : routerState;
 
-    // 3. Fetch data using the CURRENT USER ID
-    useEffect(() => {
-        if (currentUserId) {
-            dispatch(getShoppingLists(currentUserId));
-        }
-    }, [dispatch, currentUserId]);
+  // 3. Fetch data using the CURRENT USER ID
+  useEffect(() => {
+    if (currentUserId) {
+      dispatch(getShoppingLists(currentUserId));
+    }
+  }, [dispatch, currentUserId]);
 
-    // 4. Find the matching list using string-safe conversion
-    const list = lists.find((item) => String(item.id) === String(targetId));
-    //  Reset form fields after submission
-    const resetForm = () => {
-        setItemName("");
-        setQuantity(1);
-        setCategory("");
-        setNote("");
-        setImageUrl("");
-        setEditingItem(null);
-    };
+  // 4. Find the matching list using string-safe conversion
+  const list = lists.find((item) => String(item.id) === String(targetId));
+  //  Reset form fields after submission
+  const resetForm = () => {
+    setItemName("");
+    setQuantity(1);
+    setCategory("");
+    setNote("");
+    setImageUrl("");
+    setEditingItem(null);
+  };
 
-    const handleAddItem = () => {
-        resetForm();
-        setIsModalOpen(true);
-    };
+  const handleAddItem = () => {
+    resetForm();
+    setIsModalOpen(true);
+  };
 
-    const handleCloseModal = () => {
-        resetForm();
-        setIsModalOpen(false);
-    };
+  const handleCloseModal = () => {
+    resetForm();
+    setIsModalOpen(false);
+  };
 
-    // Handle form submission for adding or editing an item
+  // Handle form submission for adding or editing an item
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-        if (!currentUserId || !targetId) {
-            console.error("Missing user ID or shopping list ID");
-            return;
-        }
-
-        try {
-            if (editingItem) {
-                const updatedItem: ListItem = {
-                    ...editingItem,
-                    name: itemName,
-                    quantity,
-                    category,
-                    note,
-                    imageUrl,
-                };
-
-                await dispatch(
-                    updateListItem({
-                        userId: currentUserId,
-                        listId: String(targetId),
-                        item: updatedItem,
-                    }),
-                ).unwrap();
-            } else {
-                const newItem: ListItem = {
-                    id: Date.now().toString(),
-                    name: itemName,
-                    quantity,
-                    category,
-                    note,
-                    completed: false,
-                    createdAt: new Date().toISOString(),
-                    imageUrl,
-                };
-
-                await dispatch(
-                    addListItem({
-                        userId: currentUserId,
-                        listId: String(targetId),
-                        item: newItem,
-                    }),
-                ).unwrap();
-            }
-
-            setItemName("");
-            setQuantity(1);
-            setCategory("");
-            setNote("");
-            setImageUrl("");
-            setIsModalOpen(false);
-        } catch (error) {
-            console.error("Failed to save item:", error);
-        }
-    };
-
-    // Handle Edit Item
-    const handleEditItem = (itemId: string) => {
-        const item = list?.items.find(
-            (item) => String(item.id) === String(itemId),
-        );
-
-        if (!item) {
-            return;
-        }
-
-        setEditingItem(item);
-        setItemName(item.name);
-        setQuantity(item.quantity);
-        setCategory(item.category || "");
-        setNote(item.note || "");
-        setImageUrl(item.imageUrl || "")
-        setIsModalOpen(true);
-    };
-
-    // Handle Delete Item
-    const handleDeleteItem = async (itemId: string) => {
-        if (!currentUserId || !targetId) {
-            console.error("Missing user ID or shopping list ID");
-            return;
-        }
-
-        try {
-            await dispatch(
-                deleteListItem({
-                    userId: currentUserId,
-                    listId: String(targetId),
-                    itemId,
-                }),
-            ).unwrap();
-        } catch (error) {
-            console.error("Failed to delete item:", error);
-        }
-
-    };
-
-    // HANDLE TOGGLE COMPLETE ITEM
-
-    const handleToggleCompleteItem = async (itemId: string) => {
-        if (!currentUserId || !targetId) {
-            console.error("Missing user ID or shopping list ID");
-            return;
-        }
-
-        try {
-            await dispatch(
-                toggleListItem({
-                    userId: currentUserId,
-                    listId: String(targetId),
-                    itemId,
-                }),
-            ).unwrap();
-        } catch (error) {
-            console.error("Failed to update item:", error);
-        }
-    };
-
-    if (isLoading) {
-        return <div className={style.container}>Loading your shopping list...</div>;
+    if (!currentUserId || !targetId) {
+      console.error("Missing user ID or shopping list ID");
+      return;
     }
 
-    if (error) {
-        return <div className={style.container}>Error: {error}</div>;
+    try {
+      if (editingItem) {
+        const updatedItem: ListItem = {
+          ...editingItem,
+          name: itemName,
+          quantity,
+          category,
+          note,
+          imageUrl,
+        };
+
+        await dispatch(
+          updateListItem({
+            userId: currentUserId,
+            listId: String(targetId),
+            item: updatedItem,
+          }),
+        ).unwrap();
+      } else {
+        const newItem: ListItem = {
+          id: Date.now().toString(),
+          name: itemName,
+          quantity,
+          category,
+          note,
+          completed: false,
+          createdAt: new Date().toISOString(),
+          imageUrl,
+        };
+
+        await dispatch(
+          addListItem({
+            userId: currentUserId,
+            listId: String(targetId),
+            item: newItem,
+          }),
+        ).unwrap();
+      }
+
+      setItemName("");
+      setQuantity(1);
+      setCategory("");
+      setNote("");
+      setImageUrl("");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Failed to save item:", error);
+    }
+  };
+
+  // Handle Edit Item
+  const handleEditItem = (itemId: string) => {
+    const item = list?.items.find((item) => String(item.id) === String(itemId));
+
+    if (!item) {
+      return;
     }
 
-    if (!list) {
-        return (
-            <div className={style.container}>
-                <h2>List not found</h2>
-                <p>We couldn't locate a list matching ID: {String(targetId)}</p>
-            </div>
-        );
+    setEditingItem(item);
+    setItemName(item.name);
+    setQuantity(item.quantity);
+    setCategory(item.category || "");
+    setNote(item.note || "");
+    setImageUrl(item.imageUrl || "");
+    setIsModalOpen(true);
+  };
+
+  // Handle Delete Item
+  const handleDeleteItem = async (itemId: string) => {
+    if (!currentUserId || !targetId) {
+      console.error("Missing user ID or shopping list ID");
+      return;
     }
 
-    // Search lists
-    const filteredItems = list?.items.filter(
-        (item) =>
-            (item.name.toLowerCase().includes(search.toLowerCase()) ||
-                item.note?.toLowerCase().includes(search.toLowerCase())) &&
-            (selectedCategory === "all" ||
-                item.category?.toLowerCase() === selectedCategory.toLowerCase()),
-    ) || [];
-    // Filter by category
-    const categories = [
-        ...new Set(
-            list?.items
-                .map((item) => item.category)
-                .filter((category): category is string => Boolean(category)),
-        ),
-    ];
+    try {
+      await dispatch(
+        deleteListItem({
+          userId: currentUserId,
+          listId: String(targetId),
+          itemId,
+        }),
+      ).unwrap();
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+    }
+  };
 
+  // HANDLE TOGGLE COMPLETE ITEM
+
+  const handleToggleCompleteItem = async (itemId: string) => {
+    if (!currentUserId || !targetId) {
+      console.error("Missing user ID or shopping list ID");
+      return;
+    }
+
+    try {
+      await dispatch(
+        toggleListItem({
+          userId: currentUserId,
+          listId: String(targetId),
+          itemId,
+        }),
+      ).unwrap();
+    } catch (error) {
+      console.error("Failed to update item:", error);
+    }
+  };
+
+  if (isLoading) {
+    return <div className={style.container}>Loading your shopping list...</div>;
+  }
+
+  if (error) {
+    return <div className={style.container}>Error: {error}</div>;
+  }
+
+  if (!list) {
     return (
-        <div className={style.container}>
-            <Button className={style.backButton} variant="primary" onClick={() => window.history.back()}>
-                &larr; Back to Lists
-            </Button>
-            <div className={style.listDetails}>
-                <h1 className={style.listName}>{list.name}</h1>
-                <p className={style.listNote}>{list.note}</p>
-
-                <div>
-                    <Button variant="primary">Delete List</Button>
-                    <Button variant="primary">Share List</Button>
-                    <Button variant="primary" onClick={handleAddItem}>
-                        Add Item
-                    </Button>
-                </div>
-
-                <Modal
-                    isOpen={isModalOpen}
-                    onClose={handleCloseModal}
-                    title={editingItem ? "Edit Item" : "Add New Item"}
-                >
-                    <form onSubmit={handleSubmit}>
-                        <label className={style.label}>Item Name</label>
-                        <Input
-                            type="text"
-                            value={itemName}
-                            onChange={(e) => setItemName(e.target.value)}
-                            required
-                        />
-
-                        <label className={style.label}>Quantity</label>
-                        <Input
-                            type="number"
-                            value={quantity}
-                            onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                            required
-                        />
-
-                        <label className={style.label}>Category</label>
-                        <Input
-                            type="text"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                        />
-
-                        <label className={style.label}>Optional Note</label>
-                        <Input
-                            type="textarea"
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
-                        />
-                        <label className={style.label}>Image</label>
-                        <Input
-                            type="url"
-                            value={imageUrl}
-                            onChange={(e) => setImageUrl(e.target.value)}
-                        />
-                        <Button type="submit">{editingItem ? "Update Item" : "Add Item"}</Button>
-                    </form>
-                </Modal>
-
-
-            </div>
-            <section className={style.filters}>
-                <Input
-                    type="text"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    className={style.searchInput}
-                />
-                <select
-                    value={selectedCategory}
-                    onChange={(event) => setSelectedCategory(event.target.value)}
-                    className={style.categorySelect}
-                >
-                    <option value="all">All Categories</option>
-
-                    {categories.map((category) => (
-                        <option key={category} value={category}>
-                            {category}
-                        </option>
-                    ))}
-                </select>
-            </section>
-
-            {/* Render the structural layout for list items safely */}
-            <div className={style.displayItems}>
-                {filteredItems && filteredItems.length > 0 ? (
-                    filteredItems.map((item) => (
-                        <ItemCard
-                            key={item.id}
-                            item={item}
-                            onEdit={handleEditItem}
-                            onDelete={handleDeleteItem}
-                            onToggleComplete={handleToggleCompleteItem}
-                        />
-                    ))
-                ) : (
-                    <p className={style.noItems}>
-                        No items in this list yet. Click "Add Item" to start!
-                    </p>
-                )}
-            </div>
-        </div>
+      <div className={style.container}>
+        <h2>List not found</h2>
+        <p>We couldn't locate a list matching ID: {String(targetId)}</p>
+      </div>
     );
+  }
+
+  // Search lists
+  const filteredItems =
+    list?.items.filter(
+      (item) =>
+        (item.name.toLowerCase().includes(search.toLowerCase()) ||
+          item.note?.toLowerCase().includes(search.toLowerCase())) &&
+        (selectedCategory === "all" ||
+          item.category?.toLowerCase() === selectedCategory.toLowerCase()),
+    ) || [];
+  // Filter by category
+  const categories = [
+    ...new Set(
+      list?.items
+        .map((item) => item.category)
+        .filter((category): category is string => Boolean(category)),
+    ),
+  ];
+
+  return (
+    <div className={style.container}>
+      <Button
+        className={style.backButton}
+        variant="primary"
+        onClick={() => window.history.back()}
+      >
+        &larr; Back to Lists
+      </Button>
+      <div className={style.listDetails}>
+        <h1 className={style.listName}>{list.name}</h1>
+        <p className={style.listNote}>{list.note}</p>
+
+        <div>
+          {/* <Button variant="primary">Delete List</Button> */}
+          {/* <Button variant="primary">Share List</Button> */}
+          <Button variant="primary" onClick={handleAddItem}>
+            Add Item
+          </Button>
+        </div>
+
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          title={editingItem ? "Edit Item" : "Add New Item"}
+        >
+          <form onSubmit={handleSubmit}>
+            <label className={style.label}>Item Name</label>
+            <Input
+              type="text"
+              value={itemName}
+              onChange={(e) => setItemName(e.target.value)}
+              required
+            />
+
+            <label className={style.label}>Quantity</label>
+            <Input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+              required
+            />
+
+            <label className={style.label}>Category</label>
+            <Input
+              type="text"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
+
+            <label className={style.label}>Optional Note</label>
+            <Input
+              type="textarea"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+            <label className={style.label}>Image</label>
+            <Input
+              type="url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+            <Button type="submit">
+              {editingItem ? "Update Item" : "Add Item"}
+            </Button>
+          </form>
+        </Modal>
+      </div>
+      <section className={style.filters}>
+        <Input
+          type="text"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className={style.searchInput}
+        />
+        <select
+          value={selectedCategory}
+          onChange={(event) => setSelectedCategory(event.target.value)}
+          className={style.categorySelect}
+        >
+          <option value="all">All Categories</option>
+
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </section>
+
+      {/* Render the structural layout for list items safely */}
+      <div className={style.displayItems}>
+        {filteredItems && filteredItems.length > 0 ? (
+          filteredItems.map((item) => (
+            <ItemCard
+              key={item.id}
+              item={item}
+              onEdit={handleEditItem}
+              onDelete={handleDeleteItem}
+              onToggleComplete={handleToggleCompleteItem}
+            />
+          ))
+        ) : (
+          <p className={style.noItems}>
+            No items in this list yet. Click "Add Item" to start!
+          </p>
+        )}
+      </div>
+    </div>
+  );
 }
