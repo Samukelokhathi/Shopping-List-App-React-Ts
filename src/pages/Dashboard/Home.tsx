@@ -16,6 +16,7 @@ import {
   addShoppingList,
   deleteShoppingList,
   updateShoppingList,
+  getShoppingLists,
 } from "../../store/ShoppingList/ShoppingList";
 
 // import type { ShoppingList } from "../../types/User";
@@ -34,6 +35,8 @@ const Home = () => {
   const [numberOfItems, setNumberOfItems] = useState("");
   const [note, setNote] = useState("");
 
+  const [editingList, setEditingList] = useState<ShoppingList | null>(null); // ✅ NEW
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -50,6 +53,9 @@ const Home = () => {
     if (userId && !user) {
       dispatch(getLoggedInUser());
     }
+    if (userId) {
+      dispatch(getShoppingLists(userId));
+    }
   }, [dispatch, user]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -61,40 +67,57 @@ const Home = () => {
 
       return;
     }
+    if (editingList) {
+      //  UPDATE existing list
+      const updatedList: ShoppingList = {
+        ...editingList,
+        name: listName,
+        note,
+      };
 
-    // Create new list
-    const newList = {
-      id: Date.now().toString(),
+      try {
+        await dispatch(
+          updateShoppingList({
+            userId: user.id,
+            listId: editingList.id,
+            updatedList,
+          }),
+        ).unwrap();
 
-      name: listName,
+        //  update UI immediately
+        setEditingList(null);
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Failed to update list:", error);
+      }
+    } else {
+      // Create new list
+      const newList = {
+        id: Date.now().toString(),
+        name: listName,
+        numberOfItems: 0, // ✅ always starts at 0
+        note: note,
+        items: [],
+      };
 
-      numberOfItems: Number(numberOfItems),
+      try {
+        // Save list under logged-in user
+        await dispatch(
+          addShoppingList({
+            userId: user.id,
+            list: newList,
+          }),
+        ).unwrap();
 
-      note: note,
-      items: [],
-    };
+        // Clear form
+        setListName("");
+        setNote("");
 
-    try {
-      // Save list under logged-in user
-      await dispatch(
-        addShoppingList({
-          userId: user.id,
-
-          list: newList,
-        }),
-      ).unwrap();
-
-      // Clear form
-      setListName("");
-
-      setNumberOfItems("");
-
-      setNote("");
-
-      // Close modal
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Failed to create list:", error);
+        // Close modal
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Failed to create list:", error);
+      }
     }
   };
 
@@ -138,24 +161,24 @@ const Home = () => {
     }
   };
 
-//   const handleShareList = async (e: React.MouseEvent<HTMLButtonElement>) => {
-//     e.stopPropagation()
-//     const shareUrl = `${window.location.origin}/shared-list/${list.id}`
-//     try {
-//     if (navigator.share) {
-//     await navigator.share({
-//     title: list.name,
-//     text: `Check out my shopping list: ${list.name}`,
-//     url: shareUrl,
-//     })
-//     } else {
-//     await navigator.clipboard.writeText(shareUrl)
-//     alert('Link copied to clipboard!')
-//     }
-//     } catch (error) {
-//     console.log('Share cancelled', error)
-//     }
-// }
+  //   const handleShareList = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //     e.stopPropagation()
+  //     const shareUrl = `${window.location.origin}/shared-list/${list.id}`
+  //     try {
+  //     if (navigator.share) {
+  //     await navigator.share({
+  //     title: list.name,
+  //     text: `Check out my shopping list: ${list.name}`,
+  //     url: shareUrl,
+  //     })
+  //     } else {
+  //     await navigator.clipboard.writeText(shareUrl)
+  //     alert('Link copied to clipboard!')
+  //     }
+  //     } catch (error) {
+  //     console.log('Share cancelled', error)
+  //     }
+  // }
 
   // Handle Update
   const handleUpdate = async (listId: string, updatedList: ShoppingList) => {
@@ -222,7 +245,10 @@ const Home = () => {
                 value={note}
                 onChange={(event) => setNote(event.target.value)}
               />
-              <Button type="submit" children={"Create List"} />
+              <Button
+                type="submit"
+                children={editingList ? "Update List" : "Create List"}
+              />
             </form>
           </Modal>
         </section>
@@ -248,10 +274,12 @@ const Home = () => {
                 id={`${list.id}`}
                 list={list}
                 onEdit={(list) => {
-                  handleUpdate(list.id, list);
-                  console.log("Edit:", list);
+                  // ✅ open modal with pre-filled values
+                  setEditingList(list);
+                  setListName(list.name);
+                  setNote(list.note || "");
+                  setIsModalOpen(true);
                 }}
-
                 // share={(id) => {
                 //   handleShareList(id)
                 // }}

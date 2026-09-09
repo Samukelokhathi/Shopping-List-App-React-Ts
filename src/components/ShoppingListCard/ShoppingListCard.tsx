@@ -17,43 +17,22 @@ const ShoppingListCard = ({
   list,
   onEdit,
   onDelete,
-  onClick, 
+  onClick,
 }: ShoppingListCardProps) => {
   return (
-    <div
-      className={styles.card}
-      onClick={() => onClick(id)} 
-    >
+    <div className={styles.card} onClick={() => onClick(id)}>
       <div className={styles.content}>
         <Text variant="h2">{list.name}</Text>
-
-        <Text variant="p">
-          {list.numberOfItems} items
-        </Text>
-
-        {list.note && (
-          <Text variant="p">
-            {list.note}
-          </Text>
-        )}
+        <Text variant="p">{list.numberOfItems} items</Text>
+        {list.note && <Text variant="p">{list.note}</Text>}
       </div>
 
       <div
         className={styles.actions}
         onClick={(event) => event.stopPropagation()}
       >
-      
-        <Button onClick={() => onEdit(list)}>
-          Edit
-        </Button>
-
-        {/* <Button onClick={() => share(String(list.id))}>
-          Share
-        </Button> */}
-
-        <Button onClick={() => onDelete(String(list.id))}>
-          Delete
-        </Button>
+        <Button onClick={() => onEdit(list)}>Edit</Button>
+        <Button onClick={() => onDelete(String(list.id))}>Delete</Button>
       </div>
     </div>
   );

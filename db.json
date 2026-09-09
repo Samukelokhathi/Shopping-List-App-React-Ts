@@ -37,8 +37,8 @@
       "lists": [
         {
           "id": "1788314497748",
-          "name": "cars",
-          "numberOfItems": 3,
+          "name": "car",
+          "numberOfItems": 2,
           "note": "",
           "items": [
             {
@@ -60,15 +60,23 @@
               "completed": false,
               "createdAt": "2026-09-02T02:02:59.541Z",
               "imageUrl": ""
-            },
+            }
+          ]
+        },
+        {
+          "id": "1788912402260",
+          "name": "lol",
+          "numberOfItems": 1,
+          "note": "",
+          "items": [
             {
-              "id": "1788785923843",
-              "name": "last item",
-              "quantity": 3,
-              "category": "cars",
-              "note": "optional ",
+              "id": "1788912430812",
+              "name": "lol",
+              "quantity": 1,
+              "category": "v",
+              "note": "v",
               "completed": false,
-              "createdAt": "2026-09-07T12:58:43.843Z",
+              "createdAt": "2026-09-09T00:07:10.813Z",
               "imageUrl": ""
             }
           ]
