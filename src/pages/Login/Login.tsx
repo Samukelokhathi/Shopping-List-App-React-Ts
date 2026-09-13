@@ -2,6 +2,7 @@ import { Input } from "../../components/Input/Input";
 import styles from "./Login.module.css";
 import Button from "../../components/Button/Button";
 import { Text } from "../../components/Text/Text";
+import loginImg from "./images/istockphoto-1660821332-612x612.jpg";
 
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -37,48 +38,46 @@ function Login() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.welcomeText}>
-        <Text variant="h2" children={"Welcome back"} />
-        <Text
-          variant="p"
-          children={"Sign in to pick up your shopping where you left off."}
-        />
+      <img src={loginImg} alt="" />
+      <div className={styles.loginContainer}>
+        <div className={styles.welcomeText}>
+          <Text variant="h2" children={"Welcome back"} />
+          <Text
+            variant="p"
+            children={"Sign in to pick up your shopping where you left off."}
+          />
+        </div>
+        <form className={styles.card} onSubmit={handleSubmit}>
+          <Input
+            id="email"
+            name="email"
+            label="Email Address"
+            type="email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            required
+          />
+          <Input
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            required
+          />
+          {auth.error && <p className={styles.error}>{auth.error}</p>}
+          <Button type="submit">Sign in</Button>
+          <p className={styles.registerText}>
+            New here?{" "}
+            <NavLink to={"/register"} className={styles.registerLink}>
+              Create an account+
+            </NavLink>
+          </p>
+        </form>
       </div>
-
-      <form className={styles.card} onSubmit={handleSubmit}>
-        <Input
-          id="email"
-          name="email"
-          label="Email Address"
-          type="email"
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          required
-        />
-
-        <Input
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          required
-        />
-
-        {auth.error && <p className={styles.error}>{auth.error}</p>}
-
-        <Button type="submit">Sign in</Button>
-
-        <p className={styles.registerText}>
-          New here?{" "}
-          <NavLink to={"/register"} className={styles.registerLink}>
-            Create an account+
-          </NavLink>
-        </p>
-      </form>
     </div>
   );
 }
