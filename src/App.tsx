@@ -3,7 +3,7 @@ import Register from "./pages/Signup/Register";
 import Home from "./pages/Dashboard/Home";
 import Profile from "./pages/Profile/Profile";
 import LandingPage from "./pages/Landing/LandingPage";
-import { SharedListPage } from "./pages/SharedListPage/SharedList";
+import SharedListPage from "./pages/SharedListPage/SharedList";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { Route, Routes } from "react-router-dom";
 
