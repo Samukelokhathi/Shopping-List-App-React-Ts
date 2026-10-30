@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../store/Store";
 import { getShoppingLists } from "../../store/ShoppingList/ShoppingList";
 import { Text } from "../../components/Text/Text";
-import style from "./SharedList.module.css";
+import style from "./SharedListPage.module.css";
 
 const SharedListPage = () => {
   const { id } = useParams();
