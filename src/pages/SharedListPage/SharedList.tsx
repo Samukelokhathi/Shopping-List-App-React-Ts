@@ -91,3 +91,5 @@ export const SharedListPage = () => {
     </div>
   );
 };
+
+export default SharedListPage;
