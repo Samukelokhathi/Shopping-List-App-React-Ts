@@ -18,25 +18,17 @@ const Profile = () => {
           <div className={profileStyle.cover}></div>
 
           <div className={profileStyle.avatar}>
-            {user
-              ? `${user.name.charAt(0)}${user.surname.charAt(0)}`
-              : "SB"}
+            {user ? `${user.name.charAt(0)}${user.surname.charAt(0)}` : "SB"}
           </div>
 
           <div className={profileStyle.profileInfo}>
             <Text variant="h1">
-              {user
-                ? `${user.name} ${user.surname}`
-                : "Samukelo Bayanda"}
+              {user ? `${user.name} ${user.surname}` : "Samukelo Bayanda"}
             </Text>
 
-            <Text variant="p">
-              {user?.email || "Sbkathi005@gmail.com"}
-            </Text>
+            <Text variant="p">{user?.email || "Sbkathi005@gmail.com"}</Text>
 
-            <Text variant="p">
-              {user?.number || "069 159 4100"}
-            </Text>
+            <Text variant="p">{user?.number || "069 159 4100"}</Text>
           </div>
         </section>
 
@@ -50,7 +42,7 @@ const Profile = () => {
                 <Input
                   type="text"
                   value={user?.name || ""}
-                  onChange={() => { }}
+                  onChange={() => {}}
                 />
               </div>
 
@@ -60,7 +52,7 @@ const Profile = () => {
                 <Input
                   type="text"
                   value={user?.surname || ""}
-                  onChange={() => { }}
+                  onChange={() => {}}
                 />
               </div>
             </div>
@@ -71,7 +63,7 @@ const Profile = () => {
               <Input
                 type="email"
                 value={user?.email || ""}
-                onChange={() => { }}
+                onChange={() => {}}
               />
             </div>
 
@@ -81,13 +73,11 @@ const Profile = () => {
               <Input
                 type="text"
                 value={user?.number || ""}
-                onChange={() => { }}
+                onChange={() => {}}
               />
             </div>
 
-            <Button className={profileStyle.button}>
-              Saved details
-            </Button>
+            <Button className={profileStyle.button}>Saved details</Button>
           </div>
 
           {/* Credentials */}
@@ -98,33 +88,23 @@ const Profile = () => {
               <Input
                 type="email"
                 value={user?.email || ""}
-                onChange={() => { }}
+                onChange={() => {}}
               />
             </div>
 
             <div className={profileStyle.inputGroup}>
               <label>Password</label>
 
-              <Input
-                type="password"
-                value=""
-                onChange={() => { }}
-              />
+              <Input type="password" value="" onChange={() => {}} />
             </div>
 
             <div className={profileStyle.inputGroup}>
               <label>Confirm Password</label>
 
-              <Input
-                type="password"
-                value=""
-                onChange={() => { }}
-              />
+              <Input type="password" value="" onChange={() => {}} />
             </div>
 
-            <Button className={profileStyle.button}>
-              Update Credentials
-            </Button>
+            <Button className={profileStyle.button}>Update Credentials</Button>
           </div>
         </section>
       </main>

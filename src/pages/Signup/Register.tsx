@@ -34,7 +34,7 @@ function Register() {
       await dispatch(signup(signUpData)).unwrap();
 
       dispatch(resetForm());
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error("Signup failed:", error);
     }
@@ -122,7 +122,7 @@ function Register() {
 
         <p className={styles.registerText}>
           Already registered?{" "}
-          <NavLink to={"/"} className={styles.registerLink}>
+          <NavLink to={"/login"} className={styles.registerLink}>
             Sign in
           </NavLink>
         </p>
